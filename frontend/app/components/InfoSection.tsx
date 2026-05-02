@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import useUser, { loginHref } from "@/lib/authClient";
@@ -10,6 +10,16 @@ export const InfoSection = () => {
   const { isSignedIn } = useUser();
   const targetHref = isSignedIn ? "/Portfolio" : `${loginHref}?screen_hint=signup`;
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <section className="bg-[#F5F5F5] px-6 py-24" id="features">
@@ -54,13 +64,16 @@ export const InfoSection = () => {
             onMouseEnter={() => setHoveredCard(1)}
             onMouseLeave={() => setHoveredCard(null)}
             className="rounded-2xl p-7 min-h-80 flex flex-col justify-between relative overflow-hidden"
-            style={{
+            style={isDesktop ? {
               backgroundColor: hoveredCard === 2 || hoveredCard === 3 ? '#2B2644' : '#F5F5F5',
               flexGrow: hoveredCard === 2 || hoveredCard === 3 ? 1 : 2,
               flexShrink: 1,
               flexBasis: '0%',
               willChange: 'flex-grow, background-color',
               transition: 'flex-grow 1.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.7s ease-in-out'
+            } : {
+              backgroundColor: hoveredCard === 2 || hoveredCard === 3 ? '#2B2644' : '#F5F5F5',
+              transition: 'background-color 0.7s ease-in-out'
             }}
           >
             {/* Background Image overlay */}
@@ -96,13 +109,16 @@ export const InfoSection = () => {
             onMouseEnter={() => setHoveredCard(2)}
             onMouseLeave={() => setHoveredCard(null)}
             className="rounded-2xl p-7 min-h-80 flex flex-col justify-between relative overflow-hidden"
-            style={{
+            style={isDesktop ? {
               backgroundColor: hoveredCard === 2 ? '#F3F0FA' : '#2B2644',
               flexGrow: hoveredCard === 2 ? 2 : 1,
               flexShrink: 1,
               flexBasis: '0%',
               willChange: 'flex-grow, background-color',
               transition: 'flex-grow 1.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.7s ease-in-out'
+            } : {
+              backgroundColor: hoveredCard === 2 ? '#F3F0FA' : '#2B2644',
+              transition: 'background-color 0.7s ease-in-out'
             }}
           >
             {/* Hover Background Image overlay */}
@@ -134,14 +150,17 @@ export const InfoSection = () => {
           <div
             onMouseEnter={() => setHoveredCard(3)}
             onMouseLeave={() => setHoveredCard(null)}
-            className="rounded-2xl p-7 min-h-80 flex flex-col justify-between relative overflow-hidden"
-            style={{
+            className="rounded-2xl p-7 min-h-80 flex flex-col justify-between relative overflow-hidden sm:col-span-2 lg:col-span-1"
+            style={isDesktop ? {
               backgroundColor: hoveredCard === 3 ? '#F3F0FA' : '#2B2644',
               flexGrow: hoveredCard === 3 ? 2 : 1,
               flexShrink: 1,
               flexBasis: '0%',
               willChange: 'flex-grow, background-color',
               transition: 'flex-grow 1.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.7s ease-in-out'
+            } : {
+              backgroundColor: hoveredCard === 3 ? '#F3F0FA' : '#2B2644',
+              transition: 'background-color 0.7s ease-in-out'
             }}
           >
             {/* Hover Background Image overlay */}
