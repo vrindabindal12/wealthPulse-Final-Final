@@ -10,7 +10,7 @@ async def binance_price_worker():
     redis_client = await get_redis()
     streams = "/".join(f"{c}@ticker" for c in COINS)
     uri = f"wss://stream.binance.com:9443/stream?streams={streams}"
-    print("🔄 Connecting to Binance WebSocket...")
+    print("[INFO] Connecting to Binance WebSocket...")
 
     backoff_time = 1  # Start with 1 second backoff
     max_backoff = 300  # Max 5 minutes

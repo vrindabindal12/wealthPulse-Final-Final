@@ -200,7 +200,18 @@ async def get_famous(redis=Depends(get_redis)):
             timeout=15,
         )
     if r.status_code != 200:
-        return []
+        fallback = []
+        for cid in FAMOUS_IDS:
+            price = await _get_crypto_price(cid, redis)
+            fallback.append({
+                "id": cid, "symbol": cid[:3].upper(), "name": cid.capitalize(),
+                "image": None,
+                "current_price": price,
+                "market_cap": None,
+                "market_cap_rank": None
+            })
+        return fallback
+    
     result = []
     for c in r.json():
         price = await _get_crypto_price(c["id"], redis)

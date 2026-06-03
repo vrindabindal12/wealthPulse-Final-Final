@@ -69,22 +69,36 @@ export default function MFDashboardPage() {
     <>
       <Navbar />
       <section className="relative min-h-screen bg-gradient-to-b from-[#050511] via-[#0d1020] to-[#0b0b12] py-16 text-white">
-        <div className="max-w-5xl mx-auto px-9">
+        <div className="max-w-6xl mx-auto px-6 py-10 relative z-10">
+          
+          {/* Header */}
+          <div className="text-center mb-12">
+            <h1 className="text-5xl md:text-6xl font-extrabold mb-4 tracking-tight">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400">
+                Mutual Funds
+              </span>
+            </h1>
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto font-medium">
+              Explore NAV data, historical performance, and risk metrics for top Indian Mutual Funds.
+            </p>
+          </div>
+
           {/* Searchbar */}
-          <div className="flex justify-center mb-8 py-9 relative">
+          <div className="flex justify-center mb-16 relative group max-w-xl mx-auto">
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 blur-xl opacity-50 group-focus-within:opacity-100 transition-opacity duration-500 rounded-full"></div>
             <input
               ref={inputRef}
               value={search}
               onChange={onSearchChange}
               type="text"
               placeholder="Search Mutual Funds by name…"
-              className="w-full max-w-md px-5 py-3 rounded-full bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-purple-600 shadow-md"
+              className="relative w-full px-6 py-4 rounded-full bg-[#15182b]/80 backdrop-blur-xl border border-white/10 text-white text-lg focus:outline-none focus:border-teal-500/50 focus:ring-2 focus:ring-teal-500/20 shadow-2xl transition-all placeholder:text-gray-500"
               aria-label="Search Mutual Funds"
             />
             {search && (
               <button
                 onClick={onClearSearch}
-                className="absolute right-8 top-2.5 text-white/60 hover:text-white/90 text-xl"
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full bg-white/5 text-white/60 hover:bg-white/20 hover:text-white transition-all z-10"
                 aria-label="Clear Search"
               >
                 ×
@@ -93,33 +107,52 @@ export default function MFDashboardPage() {
           </div>
 
           {loading ? (
-            <div className="flex justify-center py-12">
-              <span className="animate-spin border-4 border-purple-400 border-t-transparent rounded-full w-8 h-8"></span>
+            <div className="flex justify-center py-20">
+              <span className="animate-spin border-4 border-teal-500/30 border-t-teal-500 rounded-full w-12 h-12"></span>
             </div>
           ) : noResults ? (
-            <div className="flex flex-col items-center py-16">
-              <span className="text-4xl mb-4 opacity-70">😕</span>
-              <span className="text-gray-400 text-lg">
+            <div className="flex flex-col items-center py-20 bg-white/5 backdrop-blur-sm rounded-3xl border border-white/5">
+              <span className="text-5xl mb-6 opacity-80">😕</span>
+              <span className="text-gray-300 text-xl font-medium">
                 No mutual funds found. Try another search!
               </span>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 mb-10">
               {displayedMfs.map(([code, name]) => (
-                <div
-                  key={code}
-                  className="bg-white/5 border border-white/10 rounded-2xl p-6 shadow-lg flex flex-col hover:bg-white/10 transition-colors"
-                >
-                  <h3 className="text-lg font-semibold mb-2">{name}</h3>
-                  <div className="text-xs text-gray-300 mb-5">
-                    Scheme Code: <span className="font-mono">{code}</span>
+                <Link href={`/MFDashboard/${code}`} key={code} className="block group">
+                  <div className="relative bg-[#15182b]/60 backdrop-blur-md border border-white/10 rounded-[1.5rem] p-6 shadow-xl flex flex-col hover:bg-[#1a1e36]/80 hover:-translate-y-1.5 hover:scale-[1.02] hover:shadow-[0_10px_40px_-10px_rgba(20,184,166,0.3)] hover:border-teal-500/30 transition-all duration-400 h-full overflow-hidden">
+                    
+                    {/* Decorative glow inside card */}
+                    <div className="absolute -top-12 -right-12 w-32 h-32 bg-teal-500/10 rounded-full blur-3xl group-hover:bg-teal-500/30 transition-colors duration-500"></div>
+
+                    {/* Header: Icon + Name */}
+                    <div className="flex items-center gap-4 mb-6 relative z-10">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-xl shadow-inner flex-shrink-0">
+                        📊
+                      </div>
+                      <div className="overflow-hidden">
+                        <h3 className="text-lg font-bold text-white tracking-tight leading-tight line-clamp-2" title={name}>
+                          {name}
+                        </h3>
+                        <div className="text-xs text-teal-300/70 font-semibold uppercase tracking-widest mt-1">CODE: {code}</div>
+                      </div>
+                    </div>
+
+                    {/* Spacer for structural consistency */}
+                    <div className="mb-8 relative z-10 flex-grow">
+                      <div className="text-xs text-gray-500 mb-1.5 uppercase tracking-wider font-semibold">Asset Class</div>
+                      <div className="text-lg font-medium text-gray-300">Mutual Fund</div>
+                    </div>
+
+                    {/* Action Button */}
+                    <div className="mt-auto relative z-10">
+                      <button className="w-full inline-flex justify-center items-center gap-2 bg-white/5 text-gray-300 text-sm font-bold px-4 py-3.5 rounded-xl border border-white/5 group-hover:text-white group-hover:bg-gradient-to-r group-hover:from-emerald-500 group-hover:to-teal-500 group-hover:border-transparent group-hover:shadow-lg group-hover:shadow-teal-500/25 transition-all duration-300">
+                        View Details →
+                      </button>
+                    </div>
                   </div>
-                  <Link href={`/MFDashboard/${code}`}>
-                    <button className="inline-flex items-center gap-2 bg-gradient-to-r from-[#9b5cff] to-[#f08bd6] text-white text-sm font-semibold px-4 py-2 rounded-full shadow hover:scale-[1.03] transition-transform">
-                      View Details →
-                    </button>
-                  </Link>
-                </div>
+                </Link>
               ))}
             </div>
           )}

@@ -28,13 +28,13 @@ async def get_nse_symbols_from_holdings() -> list[str]:
             symbols = sorted({s for s in rows if s and s.endswith(".NS")})
             return symbols
     except Exception as e:
-        print(f"⚠️ Error fetching NSE symbols from holdings: {e}")
+        print(f"[INFO] Error fetching NSE symbols from holdings: {e}")
         return []
 
 async def india_stocks_worker():
     from core.redis import get_redis
     redis_client = await get_redis()
-    print("🔄 Starting India stocks polling worker (60s interval)...")
+    print("[INFO] Starting India stocks polling worker (60s interval)...")
 
     while True:
         try:

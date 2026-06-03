@@ -1,28 +1,16 @@
-import FeaturesSectionDemo from '@/components/features-section-demo-3';
-import Hero from './components/Hero';
-import { Testimonials } from './components/Testimonials';
-import { CallToAction } from './components/CallToAction.jsx';
-import { Footer } from './components/Footer';
-import Chatbot from './components/Chatbot'; 
-import Navbar from './components/Navbar';
+import LandingPage from './components/LandingPage';
+import Chatbot from './components/Chatbot';
+
+export const metadata = {
+  title: "WealthPulse — The Future of Personal Finance",
+  description: "Institutional-grade analytics, AI-powered insights, and cinematic design — built for the investor who demands more from every market.",
+};
 
 export default function Home() {
-  const selectedFund = {
-    name: "WealthPulse",
-    code: "1212"
-  }; // optional, pass selected fund if needed
-
   return (
-    <main className="relative min-h-screen">
-      <Navbar />
-      <CallToAction />
-      <FeaturesSectionDemo />
-      <Testimonials />
-      <Hero />
-      <Footer />
-
-      {/* Chatbot floating button */}
+    <>
+      <LandingPage />
       <Chatbot currentPage="home" />
-    </main>
+    </>
   );
 }

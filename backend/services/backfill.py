@@ -7,13 +7,13 @@ STOCK_SYMBOLS = ["RELIANCE.NS", "TCS.NS", "INFY.NS", "HDFCBANK.NS",
                  "ICICIBANK.NS", "WIPRO.NS", "SBIN.NS", "BAJFINANCE.NS"]
 
 async def backfill_stock_history(db: AsyncSession):
-    print("🔄 Backfilling stock price history...")
+    print("[INFO] Backfilling stock price history...")
     for symbol in STOCK_SYMBOLS:
         try:
             df = yf.download(symbol, period="1y", interval="1d",
                              progress=False, auto_adjust=True)
             if df.empty:
-                print(f"⚠️ No data for {symbol}")
+                print(f"[INFO] No data for {symbol}")
                 continue
 
             rows = []

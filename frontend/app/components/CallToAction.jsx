@@ -1,118 +1,85 @@
 "use client";
 import useUser, { loginHref } from "@/lib/authClient";
-import starsBg from "@/assets/stars.png";
-import gridLines from "@/assets/grid-lines.png";
-import { motion, useMotionTemplate, useMotionValue, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef } from "react";
+import gsap from "gsap";
 import Link from "next/link";
 
-const useRelativeMousePosition = (to) => {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const updateMousePosition = (event) => {
-    if (!to.current) return;
-    const { top, left } = to.current.getBoundingClientRect();
-    mouseX.set(event.x - left);
-    mouseY.set(event.y - top);
-  };
+export const CallToAction = () => {
+  const containerRef = useRef(null);
+  const textRef = useRef(null);
 
   useEffect(() => {
-    window.addEventListener("mousemove", updateMousePosition);
-    return () => {
-      window.removeEventListener("mousemove", updateMousePosition);
-    };
+    const ctx = gsap.context(() => {
+      gsap.from(textRef.current, {
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 80%",
+        },
+        y: 100,
+        opacity: 0,
+        duration: 1.5,
+        ease: "power4.out"
+      });
+    }, containerRef);
+    return () => ctx.revert();
   }, []);
 
-  return [mouseX, mouseY];
-};
-
-export const CallToAction = () => {
-  const sectionRef = useRef(null);
-  const borderedDivRef = useRef(null);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  const backgroundPositionY = useTransform(scrollYProgress, [0, 1], [-300, 300]);
-  const [mouseX, mouseY] = useRelativeMousePosition(borderedDivRef);
-  const imageMask = useMotionTemplate`radial-gradient(50% 50% at ${mouseX}px ${mouseY}px, black, transparent)`;
-
   return (
-    <section
-  ref={sectionRef}
-  className="min-h-screen flex items-center justify-center bg-black text-white pt-16 md:pt-20" // slightly less top padding
->
-  <div className="container px-4">
-    <motion.div
-      ref={borderedDivRef}
-      className="relative cursor-grab border border-white/15 py-24 rounded-xl overflow-hidden group max-w-10xl mx-auto w-200%" // increased max-width
-      animate={{
-        backgroundPositionX: starsBg.width,
-      }}
-      transition={{
-        duration: 40,
-        ease: "linear",
-        repeat: Infinity,
-      }}
-      style={{
-        backgroundPositionY,
-        backgroundImage: `url(${starsBg.src})`,
-      }}
+    <section 
+      ref={containerRef}
+      className="relative py-72 overflow-hidden bg-black"
     >
-      {/* Base layer */}
-      <div
-        className="absolute inset-0 bg-[rgb(74,32,138)] bg-blend-overlay [mask-image:radial-gradient(50%_50%_at_50%_35%,black,transparent)] group-hover:opacity-0 transition duration-700"
-        style={{
-          backgroundImage: `url(${gridLines.src})`,
-        }}
-      ></div>
+      {/* The Singularity (Massive Bloom) */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-purple-600/10 blur-[180px] rounded-full animate-pulse pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1 px] h-[1000px] bg-gradient-to-b from-transparent via-purple-500/20 to-transparent" />
 
-      {/* Hover layer */}
-      <motion.div
-        className="absolute inset-0 bg-[rgb(74,32,138)] bg-blend-overlay opacity-0 group-hover:opacity-100"
-        style={{
-          maskImage: imageMask,
-          backgroundImage: `url(${gridLines.src})`,
-        }}
-      ></motion.div>
+      <div className="container mx-auto px-6 relative z-10">
+        <div 
+          ref={textRef}
+          className="max-w-6xl mx-auto text-center"
+        >
+          <div className="inline-block px-6 py-2 border border-purple-500/30 bg-purple-500/5 text-purple-400 font-mono text-[10px] tracking-[0.5em] uppercase mb-12">
+            System Synchronized
+          </div>
 
-      {/* Text + Button */}
-      <div className="relative text-center">
-        <h2 className="text-5xl md:text-6xl font-medium tracking-tighter max-w-3xl mx-auto">
-          Empower Your Financial Future with WealthPulse
-        </h2>
- <p className="text-lg text-gray-300 max-w-2xl mb-8 mt-6 mx-auto text-center">
-  Unleash your financial potential with WealthPulse
-  <br />
-  <span className="italic">
-    your AI-powered investment companion.
-  </span>
-</p>
+          <h2 className="text-6xl md:text-[10rem] font-black tracking-tighter uppercase italic leading-[0.8] mb-16 text-transparent bg-clip-text bg-gradient-to-b from-white via-white/80 to-white/20">
+            ENTER THE <br />
+            <span className="text-white drop-shadow-[0_0_30px_rgba(168,85,247,0.5)]">SINGULARITY.</span>
+          </h2>
+          
+          <p className="text-xl md:text-2xl text-gray-400 font-light tracking-[0.3em] mb-20 max-w-4xl mx-auto uppercase italic">
+            Your final portal to institutional-grade wealth intelligence.
+          </p>
 
-
-        <div>
-          {(() => {
-            const { isSignedIn } = useUser();
-            return isSignedIn ? (
-              <Link href="/Portfolio" className="inline-flex items-center gap-3 bg-gradient-to-r from-[#9b5cff] to-[#f08bd6] text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:scale-[1.02] transition-transform">
-                Get Started
-                <span className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">→</span>
-              </Link>
-            ) : (
-              <a href={`${loginHref}?screen_hint=signup`} className="inline-flex items-center gap-3 bg-gradient-to-r from-[#9b5cff] to-[#f08bd6] text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:scale-[1.02] transition-transform">
-                Get Started
-                <span className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">→</span>
-              </a>
-            );
-          })()}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-12">
+            {(() => {
+              const { isSignedIn } = useUser();
+              const link = isSignedIn ? "/Portfolio" : `${loginHref}?screen_hint=signup`;
+              return (
+                <>
+                  <a 
+                    href={link} 
+                    className="group relative px-20 py-8 bg-white text-black font-black text-2xl rounded-none transition-all duration-700 hover:scale-110 shadow-[0_0_100px_rgba(255,255,255,0.15)]"
+                  >
+                    <span className="relative z-10 tracking-[0.2em] uppercase">Initialize</span>
+                    <div className="absolute inset-0 bg-purple-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-700" />
+                  </a>
+                  <a 
+                    href="/Courses"
+                    className="text-gray-500 font-bold text-lg hover:text-white transition-all tracking-[0.4em] uppercase group"
+                  >
+                    Read Docs 
+                    <span className="inline-block translate-x-0 group-hover:translate-x-4 transition-transform duration-500 ml-4">{" >>"}</span>
+                  </a>
+                </>
+              );
+            })()}
+          </div>
         </div>
       </div>
-    </motion.div>
-  </div>
-</section>
-
+    </section>
   );
 };
+
+
+

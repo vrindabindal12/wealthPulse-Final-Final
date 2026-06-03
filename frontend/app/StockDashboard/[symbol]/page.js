@@ -359,8 +359,8 @@ export default function StockDetailsPage() {
   return (
     <>
       <Navbar />
-      <section className="min-h-screen py-18 px-2 bg-gradient-to-b from-[#050511] via-[#0d1020] to-[#0b0b12] text-white">
-        <div className="max-w-7xl mx-auto grid gap-6">
+      <section className="min-h-screen pt-28 pb-16 px-4 md:px-8 bg-gradient-to-b from-[#050511] via-[#0d1020] to-[#0b0b12] text-white">
+        <div className="max-w-7xl mx-auto grid gap-8">
           {loading ? (
             <div className="flex justify-center items-center min-h-[60vh]">
               <span className="animate-spin border-4 border-purple-400 border-t-transparent rounded-full w-10 h-10"></span>

@@ -21,8 +21,8 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 border-b border-white/10 backdrop-blur-md transition-all duration-300 ${
-        openNavigation ? "bg-[#0b0b12]/95" : "bg-[#0b0b12]/70"
+      className={`fixed top-0 left-0 w-full z-50 border-b border-white/5 transition-all duration-300 ${
+        openNavigation ? "bg-[#030303]" : "bg-[#030303]/80 backdrop-blur-sm"
       }`}
     >
       <div className="flex items-center justify-between max-w-7xl mx-auto px-6 py-3 md:py-4">

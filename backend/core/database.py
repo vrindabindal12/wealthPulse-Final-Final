@@ -5,7 +5,7 @@ from core.config import settings
 engine = create_async_engine(
     settings.DATABASE_URL,
     echo=False,
-    connect_args={"ssl": "require"}
+    # connect_args={"ssl": "require"}
 )
 AsyncSessionLocal = sessionmaker(
     engine, class_=AsyncSession, expire_on_commit=False

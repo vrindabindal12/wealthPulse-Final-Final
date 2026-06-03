@@ -5,72 +5,104 @@ import { cn } from "@/lib/utils";
 import createGlobe from "cobe";
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { IconBrandYoutubeFilled } from "@tabler/icons-react";
 
+gsap.registerPlugin(ScrollTrigger);
+
 export default function FeaturesSectionDemo() {
+  const sectionRef = useRef(null);
+  const cardsRef = useRef([]);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(cardsRef.current, {
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 70%",
+        },
+        y: 50,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.2,
+        ease: "power2.out"
+      });
+    }, sectionRef);
+    return () => ctx.revert();
+  }, []);
+
   const features = [
     {
-      title: "Real-Time Portfolio Tracking",
+      title: "Consolidated Asset Intelligence",
       description:
-        "Monitor your mutual funds, crypto, and investments seamlessly with live data and AI-driven insights — all in one dashboard.",
+        "Unified visibility across equities, fixed income, crypto, and mutual funds. Normalized data streams for crystal-clear portfolio oversight.",
       skeleton: <SkeletonOne />,
       className:
-        "col-span-1 lg:col-span-4 border-b lg:border-r dark:border-neutral-800",
+        "col-span-1 lg:col-span-4 border-b lg:border-r border-white/5",
     },
     {
-      title: "AI Investment Insights",
+      title: "Predictive Risk Modeling",
       description:
-        "Receive smart, personalized recommendations powered by AI. Analyze trends, risks, and growth opportunities effortlessly.",
+        "Utilize advanced AI to simulate market volatility and optimize your asset allocation based on real-time risk parameters.",
       skeleton: <SkeletonTwo />,
-      className: "border-b col-span-1 lg:col-span-2 dark:border-neutral-800",
+      className: "border-b col-span-1 lg:col-span-2 border-white/5",
     },
     {
-      title: "Learn with WealthPulse",
+      title: "Institutional Knowledge Base",
       description:
-        "Access videos, tutorials, and blogs to understand stocks, crypto, and mutual funds. Grow your financial literacy with ease.",
+        "Access curated financial intelligence and structured learning modules to master complex market instruments.",
       skeleton: <SkeletonThree />,
       className:
-        "col-span-1 lg:col-span-3 lg:border-r dark:border-neutral-800 lg:pb-6",
+        "col-span-1 lg:col-span-3 lg:border-r border-white/5 lg:pb-6",
     },
     {
-      title: "Global Financial Connectivity",
+      title: "Global Liquidity Network",
       description:
-        "WealthPulse connects investors worldwide — bringing real-time markets, global insights, and secure transactions to your fingertips.",
+        "Connect to global markets with low-latency data feeds and secure transaction protocols designed for serious investors.",
       skeleton: <SkeletonFour />,
       className:
-        "col-span-1 lg:col-span-3 lg:border-r dark:border-neutral-800 lg:pb-12 relative after:content-[''] after:absolute after:-bottom-6 after:right-0 after:w-px after:h-6 after:bg-neutral-800",
+        "col-span-1 lg:col-span-3 lg:border-r border-white/5 lg:pb-12",
     },
   ];
 
   return (
-    <section id="features" className="relative w-full bg-gradient-to-b from-[#050511] via-[#0d1020] to-[#0b0b12] overflow-hidden text-white">
-      <div className="relative z-20 py-6 lg:py-12 max-w-7xl mx-auto">
-        <div className="px-8">
-          <h4 className="text-3xl lg:text-5xl lg:leading-tight max-w-5xl mx-auto text-center tracking-tight font-medium text-white">
-            Designed to Empower Every Investor
-          </h4>
-
-          <p className="text-sm lg:text-base max-w-2xl my-4 mx-auto text-white text-center font-normal">
-            WealthPulse combines AI, real-time analytics, and education to help you
-            make smarter financial decisions with confidence and clarity.
+    <section ref={sectionRef} id="features" className="relative w-full py-48 bg-black overflow-hidden text-white">
+      <div className="relative z-20 max-w-7xl mx-auto px-6">
+        <div className="mb-32 text-center">
+          <h2 className="text-5xl md:text-8xl font-black tracking-tighter uppercase italic mb-8">
+            QUANTUM <span className="text-purple-500 shadow-purple-500/50 shadow-2xl">CORE</span>
+          </h2>
+          <p className="text-gray-500 text-xl font-light tracking-[0.4em] uppercase">
+            Hyper-threaded market processing.
           </p>
         </div>
 
-        <div className="relative">
-          <div className="grid grid-cols-1 lg:grid-cols-6 mt-12 xl:border rounded-md dark:border-neutral-800">
-            {features.map((feature) => (
-              <FeatureCard key={feature.title} className={feature.className}>
-                <FeatureTitle>{feature.title}</FeatureTitle>
-                <FeatureDescription>{feature.description}</FeatureDescription>
-                <div className="h-full w-full">{feature.skeleton}</div>
-              </FeatureCard>
-            ))}
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-6 gap-8">
+          {features.map((feature, index) => (
+            <div
+              key={feature.title}
+              ref={el => cardsRef.current[index] = el}
+              className={cn(`glass p-12 relative group rounded-none overflow-hidden`, feature.className)}
+            >
+              <div className="absolute top-0 right-0 p-4 font-mono text-[10px] text-white/20 tracking-widest border-l border-b border-white/5">
+                SEC_TYPE_0{index + 1}
+              </div>
+
+              <FeatureTitle>{feature.title}</FeatureTitle>
+              <FeatureDescription>{feature.description}</FeatureDescription>
+              <div className="mt-16 relative">
+                <div className="absolute inset-0 bg-purple-500/10 blur-[50px] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                {feature.skeleton}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
   );
 }
+
 
 const FeatureCard = ({ children, className }) => {
   return (
@@ -107,15 +139,15 @@ const FeatureDescription = ({ children }) => {
 export const SkeletonOne = () => {
   return (
     <div className="relative flex items-center justify-center py-6 px-3 h-72">
-        <div className="w-full mx-auto bg-white dark:bg-neutral-900 shadow-xl rounded-lg overflow-hidden">
-          <img
-            src="/ss.png"
-            alt="portfolio tracking"
-            width={600}
-            height={600}
-            className="h-72 w-full object-cover object-center rounded-md"
-          />
-        </div>
+      <div className="w-full mx-auto bg-white dark:bg-neutral-900 shadow-xl rounded-lg overflow-hidden">
+        <img
+          src="/ss.png"
+          alt="portfolio tracking"
+          width={600}
+          height={600}
+          className="h-72 w-full object-cover object-center rounded-md"
+        />
+      </div>
 
       <div className="absolute bottom-0 z-40 inset-x-0 h-24 bg-gradient-to-t from-[#0b0b12] via-transparent to-transparent pointer-events-none" />
       <div className="absolute top-0 z-40 inset-x-0 h-24 bg-gradient-to-b from-[#0b0b12] via-transparent to-transparent pointer-events-none" />
@@ -125,11 +157,11 @@ export const SkeletonOne = () => {
 
 export const SkeletonTwo = () => {
   const charts = [
-  "https://images.unsplash.com/photo-1551288049-bebda4e38f71", // Charts/analytics
-  "https://images.unsplash.com/photo-1460925895917-afdab827c52f", // Graphs
-  "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3", // Data visualization
-  "https://images.unsplash.com/photo-1563986768609-322da13575f3", // Business charts
-];
+    "https://images.unsplash.com/photo-1551288049-bebda4e38f71", // Charts/analytics
+    "https://images.unsplash.com/photo-1460925895917-afdab827c52f", // Graphs
+    "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3", // Data visualization
+    "https://images.unsplash.com/photo-1563986768609-322da13575f3", // Business charts
+  ];
 
 
   const imageVariants = {

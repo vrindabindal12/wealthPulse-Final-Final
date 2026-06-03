@@ -14,7 +14,7 @@ async def finnhub_price_worker():
     from core.redis import get_redis
     redis_client = await get_redis()
     uri = f"wss://ws.finnhub.io?token={FINNHUB_KEY}"
-    print("🔄 Connecting to Finnhub WebSocket...")
+    print("[INFO] Connecting to Finnhub WebSocket...")
 
     backoff_time = 1  # Start with 1 second backoff
     max_backoff = 300  # Max 5 minutes

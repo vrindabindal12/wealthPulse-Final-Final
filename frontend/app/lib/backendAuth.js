@@ -105,12 +105,12 @@ export async function forwardToBackend(request, backendUrl, options = {}) {
   const authHeaders = await getBackendAuthHeaders(request);
 
   if (!authHeaders) {
-    console.error(
-      "[forwardToBackend] Auth extraction failed for:",
+    console.warn(
+      "[forwardToBackend] No auth session found for:",
       request.method,
       backendUrl,
+      "- sending unauthenticated request."
     );
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
   const method = options.method || request.method;
@@ -142,7 +142,7 @@ export async function forwardToBackend(request, backendUrl, options = {}) {
     };
 
     console.log(
-      `[forwardToBackend] ${method} ${backendUrl} with Authorization: ${authHeaders.Authorization ? "Bearer token present" : "MISSING"}`,
+      `[forwardToBackend] ${method} ${backendUrl} with Authorization: ${authHeaders?.Authorization ? "Bearer token present" : "MISSING"}`,
     );
 
     const response = await fetch(backendUrl, fetchOptions);

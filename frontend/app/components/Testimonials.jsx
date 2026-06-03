@@ -4,84 +4,105 @@ import avatar2 from "@/assets/avatar-2.png";
 import avatar3 from "@/assets/avatar-3.png";
 import avatar4 from "@/assets/avatar-4.png";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
 
 const testimonials = [
   {
     text: "“WealthPulse gave me the confidence to start investing. The real-time insights make complex data feel simple and actionable.”",
     name: "Aarav Sharma",
     title: "Young Investor",
-    avatarImg: avatar2,
+    avatarImg: avatar1,
   },
   {
     text: "“The AI-driven recommendations and learning hub have completely changed how I understand mutual funds and crypto.”",
     name: "Priya Mehta",
     title: "Finance Student",
-    avatarImg: avatar3,
+    avatarImg: avatar2,
   },
   {
-    text: "“As a working professional, I finally have a single dashboard to track my portfolio and make smarter financial moves.”",
+    text: "“As a working professional, I finally have single dashboard to track my portfolio and make smarter financial moves.”",
     name: "Rahul Khanna",
     title: "Product Manager @ FinEdge",
-    avatarImg: avatar4,
+    avatarImg: avatar3,
   },
   {
     text: "“WealthPulse makes investing feel effortless — it’s like having a personal financial advisor powered by AI.”",
     name: "Neha Kapoor",
     title: "Entrepreneur",
-    avatarImg: avatar1,
+    avatarImg: avatar4,
   },
 ];
 
 export const Testimonials = () => {
-  return (
-    <section id="testimonials" className="py-20 md:py-24 bg-black">
-      <div className="container flex flex-col items-center justify-center mx-auto">
-        <h2 className="text-5xl md:text-6xl font-medium tracking-tighter text-white text-center mx-auto">
-          Trusted by Smart Investors.
-        </h2>
-        <p className="text-gray-400 text-lg md:text-xl max-w-sm mx-auto text-center mt-5 tracking-tight">
-          Discover how WealthPulse empowers users to invest confidently and grow smarter with AI-driven insights.
-        </p>
+  const sectionRef = useRef(null);
+  const itemsRef = useRef([]);
 
-        {/* Hide scrollbar cleanly */}
-        <div className="relative w-full mt-10 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_20%,black_80%,transparent)]">
-          <motion.div
-            initial={{ translateX: `-50%` }}
-            animate={{ translateX: `0%` }}
-            transition={{
-              ease: "linear",
-              repeat: Infinity,
-              duration: 30,
-            }}
-            className="flex gap-5 pr-5 flex-none will-change-transform"
-          >
-            {[...testimonials, ...testimonials].map((testimonial, idx) => (
-              <div
-                key={`${testimonial.name}-${idx}`}
-                className="border border-white/15 p-6 md:p-10 rounded-xl bg-[linear-gradient(to_bottom_left,rgb(140,69,255,.3),black)] max-w-xs md:max-w-md flex-none"
-              >
-                <div className="text-lg md:text-xl tracking-tight text-white">
-                  {testimonial.text}
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(itemsRef.current, {
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 80%",
+        },
+        y: 30,
+        opacity: 0,
+        stagger: 0.15,
+        duration: 1,
+        ease: "power2.out"
+      });
+    }, sectionRef);
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section 
+      ref={sectionRef}
+      id="testimonials" 
+      className="py-40 bg-[#030303]"
+    >
+      <div className="container mx-auto px-6">
+        <div className="mb-20 text-left max-w-2xl">
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
+            Client <br />
+            <span className="text-white/40">Perspectives.</span>
+          </h2>
+          <p className="text-gray-500 text-lg md:text-xl font-medium">
+            Join a network of sophisticated investors who rely on our platform for their daily market execution.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {testimonials.map((testimonial, idx) => (
+            <div
+              key={`${testimonial.name}-${idx}`}
+              ref={el => itemsRef.current[idx] = el}
+              className="p-8 rounded-2xl bg-white/[0.02] border border-white/5 transition-all duration-300 hover:bg-white/[0.04] flex flex-col h-full"
+            >
+              <div className="text-lg font-medium leading-relaxed text-gray-300 mb-10">
+                {testimonial.text}
+              </div>
+              <div className="flex items-center gap-4 mt-auto">
+                <div className="h-10 w-10 overflow-hidden rounded-full border border-white/10">
+                  <Image
+                    src={testimonial.avatarImg}
+                    alt={testimonial.name}
+                    width={40}
+                    height={40}
+                    className="object-cover grayscale"
+                  />
                 </div>
-                <div className="flex items-center gap-3 mt-5">
-                  <div className="relative">
-                    <Image
-                      src={testimonial.avatarImg}
-                      alt={`Avatar for ${testimonial.name}`}
-                      className="h-11 w-11 rounded-xl grayscale border border-white/30"
-                    />
-                  </div>
-                  <div>
-                    <div className="text-white">{testimonial.name}</div>
-                    <div className="text-white/50 text-sm">{testimonial.title}</div>
-                  </div>
+                <div>
+                  <div className="text-white font-bold text-sm tracking-tight">{testimonial.name}</div>
+                  <div className="text-white/40 text-[10px] font-bold tracking-widest uppercase">{testimonial.title}</div>
                 </div>
               </div>
-            ))}
-          </motion.div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
   );
 };
+
+
