@@ -293,13 +293,6 @@ export default function LandingPage() {
           rotateX: -20,
         });
       });
-
-      // ── NAVBAR SCROLL BEHAVIOR ──
-      ScrollTrigger.create({
-        start: "top -80",
-        onEnter: () => gsap.to(navRef.current, { backgroundColor: "rgba(0,0,0,0.85)", backdropFilter: "blur(20px)", duration: 0.4 }),
-        onLeaveBack: () => gsap.to(navRef.current, { backgroundColor: "transparent", backdropFilter: "blur(0px)", duration: 0.4 }),
-      });
     });
 
     return () => ctx.revert();
@@ -339,7 +332,7 @@ export default function LandingPage() {
     <div className="relative min-h-screen bg-black text-white overflow-x-hidden">
       <ParticleCanvas />
 
-      {/* Ambient glow — permanently behind everything */}
+      {/* ambient glow */}
       <div
         ref={glowRef}
         className="pointer-events-none fixed top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full z-0"
@@ -347,16 +340,18 @@ export default function LandingPage() {
       />
 
       {/* ══════════════════════════ NAVBAR ══════════════════════════ */}
-      <header ref={navRef} className="fixed top-0 left-0 right-0 z-50 border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-7 h-7 rounded-md bg-gradient-to-br from-violet-500 to-purple-700 flex items-center justify-center">
-              <div className="w-3 h-3 rounded-sm bg-white/90" />
+      <header ref={navRef} className="fixed top-0 left-0 right-0 z-50 bg-[#000000]/50 backdrop-blur-2xl border-b border-white/5 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
+        <div className="max-w-[1600px] w-full mx-auto px-8 py-10 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-violet-600 via-fuchsia-600 to-orange-500 p-[1px] shadow-[0_0_20px_rgba(139,92,246,0.3)] group-hover:shadow-[0_0_30px_rgba(139,92,246,0.5)] transition-shadow duration-500">
+              <div className="w-full h-full bg-black rounded-[11px] flex items-center justify-center">
+                <div className="w-3 h-3 rounded-sm bg-gradient-to-br from-violet-400 to-fuchsia-400" />
+              </div>
             </div>
-            <span className="font-black text-lg tracking-tight">WealthPulse</span>
+            <span className="font-bold text-xl tracking-tight text-white/90">WealthPulse</span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-8 text-sm">
+          <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
             {[
               ["Features", "#features"],
               ["Stocks", "/StockDashboard"],
@@ -364,28 +359,30 @@ export default function LandingPage() {
               ["Crypto", "/CryptoDashboard"],
               ["Education", "/Courses"],
             ].map(([label, href]) => (
-              <a key={label} href={href} className="text-white/40 hover:text-white transition-colors duration-300 tracking-wide">
+              <a key={label} href={href} className="px-5 py-2 rounded-full text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-300">
                 {label}
               </a>
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-2">
             {isLoading ? (
-              <div className="w-20 h-8 bg-white/5 rounded animate-pulse" />
+              <div className="w-24 h-10 bg-white/5 rounded-full animate-pulse" />
             ) : isSignedIn && user ? (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 bg-white/5 p-1 pr-4 rounded-full border border-white/10 hover:border-white/20 transition-colors">
                 <img src={user.picture || "/vercel.svg"} alt={user.name} className="w-8 h-8 rounded-full border border-white/20" />
-                <a href={logoutHref} className="text-xs text-white/50 hover:text-white border border-white/10 px-3 py-1.5 rounded transition-all hover:border-white/30">
+                <a href={logoutHref} className="text-xs font-semibold text-gray-300 hover:text-white transition-colors">
                   Sign out
                 </a>
               </div>
             ) : (
-              <div className="flex items-center gap-3">
-                <a href={loginHref} className="text-sm text-white/50 hover:text-white transition-colors">Sign in</a>
+              <div className="flex items-center gap-5">
+                <a href={loginHref} className="text-sm font-medium text-gray-300 hover:text-white px-3 py-2.5 rounded-full hover:bg-white/5 transition-colors">Sign in</a>
+                {/* Subtle divider */}
+                <span className="w-px h-5 bg-white/20 hidden lg:block" />
                 <MagneticButton
                   href={`${loginHref}?screen_hint=signup`}
-                  className="text-sm bg-violet-600 hover:bg-violet-500 text-white px-5 py-2 rounded-full font-semibold transition-all duration-300"
+                  className="relative inline-flex items-center justify-center px-8 py-3 text-sm font-bold tracking-wide text-white transition-all duration-300 bg-gradient-to-r from-violet-600 via-fuchsia-600 to-orange-500 rounded-full hover:scale-105 shadow-[0_0_30px_rgba(139,92,246,0.4)] hover:shadow-[0_0_40px_rgba(217,70,239,0.6)] border border-white/20 hover:border-white/40"
                 >
                   Get Started
                 </MagneticButton>
@@ -393,19 +390,22 @@ export default function LandingPage() {
             )}
           </div>
 
-          <button className="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-1.5" onClick={() => setMenuOpen(o => !o)}>
-            <span className={`w-5 h-0.5 bg-white transition-all ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
-            <span className={`w-5 h-0.5 bg-white transition-all ${menuOpen ? "opacity-0" : ""}`} />
-            <span className={`w-5 h-0.5 bg-white transition-all ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+          <button className="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 rounded-full hover:bg-white/5 transition-colors" onClick={() => setMenuOpen(o => !o)}>
+            <span className={`w-5 h-0.5 bg-white transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
+            <span className={`w-5 h-0.5 bg-white transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
+            <span className={`w-5 h-0.5 bg-white transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
           </button>
         </div>
 
         {menuOpen && (
-          <nav className="md:hidden bg-black/95 border-t border-white/5 px-6 py-6 flex flex-col gap-5">
+          <nav className="md:hidden bg-[#050505]/95 backdrop-blur-2xl border-t border-white/5 px-6 py-6 flex flex-col gap-2 shadow-2xl">
             {[["Features", "#features"], ["Stocks", "/StockDashboard"], ["Mutual Funds", "/MFDashboard"], ["Crypto", "/CryptoDashboard"], ["Education", "/Courses"]].map(([label, href]) => (
-              <a key={label} href={href} className="text-white/50 hover:text-white transition-colors" onClick={() => setMenuOpen(false)}>{label}</a>
+              <a key={label} href={href} className="text-gray-400 hover:text-white hover:bg-white/5 px-4 py-3 rounded-xl transition-colors font-medium text-base" onClick={() => setMenuOpen(false)}>{label}</a>
             ))}
-            <a href={link} className="text-sm bg-violet-600 text-white px-5 py-2.5 rounded-full font-semibold text-center mt-2">Get Started</a>
+            <div className="mt-4 pt-4 border-t border-white/5 flex flex-col gap-3">
+              <a href={loginHref} className="text-center text-sm font-medium text-gray-300 hover:text-white py-3 rounded-xl hover:bg-white/5 transition-colors">Sign in</a>
+              <a href={link} className="text-sm bg-white text-black py-3 rounded-xl font-semibold text-center shadow-[0_0_20px_rgba(255,255,255,0.1)]">Get Started</a>
+            </div>
           </nav>
         )}
       </header>
