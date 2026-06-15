@@ -282,7 +282,7 @@ export default function PortfolioPage() {
   return (
     <div className="min-h-screen py-12 px-4 bg-linear-to-b from-[#050511] via-[#0d1020] to-[#0b0b12]">
       <Navbar /> {/* <-- Added Navbar here */}
-      <div className="max-w-7xl mt-12">
+      <div className="max-w-6xl mx-auto mt-12 px-6">
         <div className="mb-8">
           <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
             <div>

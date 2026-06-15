@@ -8,6 +8,9 @@ const nextConfig = {
       },
     ],
   },
+  env: {
+    NEXT_PUBLIC_GROQ_API_KEY: process.env.GROQ_API_KEY || "",
+  },
   async rewrites() {
     return [
       // Per-asset market data routes (also support direct /api/mutual, /api/stock, /api/crypto)
