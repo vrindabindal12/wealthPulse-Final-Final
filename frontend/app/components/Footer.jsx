@@ -1,37 +1,40 @@
 "use client";
 
-import styles from "../style";
-import { logo } from "../assets";
+import { LogoIcon } from "./LogoIcon";
 import { footerLinks, socialMedia } from "../constants";
 
 const Footer = () => (
-  <section className={`${styles.flexCenter} ${styles.paddingY} flex-col absolute bg-transparent w-full z-10`}>
-    <div className={`${styles.flexStart} md:flex-row flex-col mb-8 w-full`}>
-      <div className="flex-[1] flex flex-col justify-start mr-10">
-        <img
-          src={logo}
-          alt="hoobank"
-          className="w-[266px] h-[72.14px] object-contain"
-        />
-        <p className={`${styles.paragraph} mt-4 max-w-[312px]`}>
-          A new way to make the payments easy, reliable and secure.
+  <section className="bg-white border-t border-black/5 w-full py-16 px-8 md:px-16 flex flex-col items-center relative z-10">
+    <div className="max-w-[88rem] w-full flex flex-col md:flex-row justify-between items-start gap-10 mb-12">
+      <div className="flex flex-col items-start max-w-sm">
+        <div className="flex items-center gap-2 select-none mb-4">
+          <LogoIcon className="w-7 h-7 text-black/90" />
+          <span className="text-[22px] font-semibold tracking-[-0.03em] text-black">
+            WealthPulse
+          </span>
+        </div>
+        <p className="text-black/60 text-sm leading-relaxed">
+          An automated, reward-powered digital dollar built for native passive earnings and effortless connection into DeFi.
         </p>
       </div>
 
-      <div className="flex-[1.5] w-full flex flex-row justify-between flex-wrap md:mt-0 mt-10">
+      <div className="flex flex-wrap gap-12 md:gap-24">
         {footerLinks.map((footerlink) => (
-          <div key={footerlink.title} className={`flex flex-col ss:my-0 my-4 min-w-[150px]`}>
-            <h4 className="font-poppins font-medium text-[18px] leading-[27px] text-white">
+          <div key={footerlink.title} className="flex flex-col min-w-[120px]">
+            <h4 className="font-semibold text-xs tracking-wider text-black uppercase mb-4">
               {footerlink.title}
             </h4>
-            <ul className="list-none mt-4">
-              {footerlink.links.map((link, index) => (
-                <li
-                  key={link.name}
-                  className={`font-poppins font-normal text-[16px] leading-[24px] text-dimWhite hover:text-secondary cursor-pointer ${index !== footerlink.links.length - 1 ? "mb-4" : "mb-0"
-                    }`}
-                >
-                  {link.name}
+            <ul className="flex flex-col gap-3">
+              {footerlink.links.map((link) => (
+                <li key={link.name}>
+                  <a
+                    href={link.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-black/65 hover:text-black text-sm transition-colors duration-200"
+                  >
+                    {link.name}
+                  </a>
                 </li>
               ))}
             </ul>
@@ -40,21 +43,26 @@ const Footer = () => (
       </div>
     </div>
 
-    <div className="w-full flex justify-between items-center md:flex-row flex-col pt-6 border-t-[1px] border-t-[#3F3E45]">
-      <p className="font-poppins font-normal text-center text-[18px] leading-[27px] text-white">
-        Copyright Ⓒ 2025 Phoenix Arcana. All Rights Reserved.
+    <div className="max-w-[88rem] w-full pt-8 border-t border-black/5 flex flex-col md:flex-row justify-between items-center gap-6">
+      <p className="text-black/40 text-sm">
+        Copyright Ⓒ 2026 WealthPulse. All rights reserved.
       </p>
 
-      <div className="flex flex-row md:mt-0 mt-6">
-        {socialMedia.map((social, index) => (
-          <img
+      <div className="flex items-center gap-6">
+        {socialMedia.map((social) => (
+          <a
             key={social.id}
-            src={social.icon}
-            alt={social.id}
-            className={`w-[21px] h-[21px] object-contain cursor-pointer ${index !== socialMedia.length - 1 ? "mr-6" : "mr-0"
-              }`}
-            onClick={() => window.open(social.link)}
-          />
+            href={social.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="opacity-60 hover:opacity-100 transition-opacity duration-200 invert"
+          >
+            <img
+              src={social.icon.src}
+              alt={social.id}
+              className="w-5 h-5 object-contain"
+            />
+          </a>
         ))}
       </div>
     </div>
