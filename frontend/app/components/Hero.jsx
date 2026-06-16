@@ -30,30 +30,32 @@ export const HeroSection = () => {
         />
 
         {/* Content Overlay */}
-        <div className="relative z-10 flex flex-col items-start justify-start h-full p-6 md:p-12 pt-20 md:pt-36 hero-overlay">
-          <h1
-            className="text-black text-5xl md:text-6xl font-medium leading-tight max-w-xl mb-4 tracking-tight"
-            style={{ letterSpacing: '-0.04em' }}
-          >
-            Your Wealth<br />Works
-          </h1>
+        <div className="relative z-10 flex flex-col items-start justify-between h-full p-6 md:p-12 pt-12 md:pt-20 hero-overlay">
+          <div className="flex flex-col items-start">
+            <h1
+              className="text-black text-5xl md:text-6xl font-medium leading-tight max-w-xl mb-4 tracking-tight"
+              style={{ letterSpacing: '-0.04em' }}
+            >
+              Your Wealth<br />Works
+            </h1>
 
-          <p
-            className="text-black/70 text-base md:text-lg max-w-md mb-8 leading-relaxed font-sans hero-p"
-            style={{ fontFamily: "'Inter', ui-sans-serif, system-ui, sans-serif" }}
-          >
-            An automated, reward-powered digital dollar built for native passive earnings and effortless connection into DeFi.
-          </p>
+            <p
+              className="text-black/70 text-base md:text-lg max-w-md mb-8 leading-relaxed font-sans hero-p"
+              style={{ fontFamily: "'Inter', ui-sans-serif, system-ui, sans-serif" }}
+            >
+              An automated, reward-powered digital dollar built for native passive earnings and effortless connection into DeFi.
+            </p>
 
-          <button className="inline-flex items-center gap-3 bg-black text-white text-base md:text-lg font-medium pl-8 pr-2 py-2 rounded-full hover:bg-gray-800 transition-colors duration-200">
-            <span>Join us</span>
-            <span className="bg-white rounded-full p-2 flex items-center justify-center">
-              <ArrowRight className="w-5 h-5 text-black" />
-            </span>
-          </button>
+            <button className="inline-flex items-center gap-3 bg-black text-white text-base md:text-lg font-medium pl-8 pr-2 py-2 rounded-full hover:bg-gray-800 transition-colors duration-200">
+              <span>Join us</span>
+              <span className="bg-white rounded-full p-2 flex items-center justify-center">
+                <ArrowRight className="w-5 h-5 text-black" />
+              </span>
+            </button>
+          </div>
 
           {/* Brand Marquee */}
-          <div className="mt-12 md:mt-24 w-full max-w-md overflow-hidden hero-marquee-container">
+          <div className="mt-8 w-full max-w-md overflow-hidden hero-marquee-container">
             <div className="marquee-track">
               {/* First iteration */}
               {heroBrands.map((brand, idx) => (

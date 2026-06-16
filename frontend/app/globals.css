@@ -18,8 +18,8 @@
 :root {
   --background: #F5F5F5;
   --foreground: #111111;
-  --muted: rgba(0,0,0,0.65);
-  --border: rgba(0,0,0,0.08);
+  --muted: rgba(0, 0, 0, 0.65);
+  --border: rgba(0, 0, 0, 0.08);
   --radius: 24px;
 }
 
@@ -48,7 +48,7 @@ a {
 }
 
 ::selection {
-  background: rgba(0,0,0,.1);
+  background: rgba(0, 0, 0, .1);
   color: black;
 }
 
@@ -61,7 +61,7 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,.15);
+  background: rgba(0, 0, 0, .15);
   border-radius: 999px;
 }
 
@@ -70,6 +70,7 @@ a {
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(-50%);
   }
@@ -91,6 +92,7 @@ a {
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(-50%);
   }
