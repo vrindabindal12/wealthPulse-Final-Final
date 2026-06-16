@@ -23,46 +23,48 @@
   --radius: 24px;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: "TT Norms Pro", Inter, sans-serif;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@layer base {
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: "TT Norms Pro", Inter, sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: "TT Norms Pro", Inter, sans-serif;
-  font-weight: 600;
-}
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "TT Norms Pro", Inter, sans-serif;
+    font-weight: 600;
+  }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 
-::selection {
-  background: rgba(0, 0, 0, .1);
-  color: black;
-}
+  ::selection {
+    background: rgba(0, 0, 0, .1);
+    color: black;
+  }
 
-::-webkit-scrollbar {
-  width: 6px;
-}
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
 
-::-webkit-scrollbar-track {
-  background: #F5F5F5;
-}
+  ::-webkit-scrollbar-track {
+    background: #F5F5F5;
+  }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, .15);
-  border-radius: 999px;
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, .15);
+    border-radius: 999px;
+  }
 }
 
 /* Hero marquee */
