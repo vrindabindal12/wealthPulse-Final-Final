@@ -4,7 +4,7 @@
 @plugin "tailwindcss-animate";
 
 :root {
-  --font-sans: 'Inter', sans-serif;
+  --font-sans: "TT Norms Pro", 'Inter', sans-serif;
   --font-display: 'Outfit', sans-serif;
 }
 
@@ -18,10 +18,18 @@ html {
   scroll-behavior: smooth;
 }
 
+html,
+body,
+header,
+nav,
+button,
+a {
+  font-family: "TT Norms Pro", "Inter", sans-serif;
+}
+
 body {
   background: #000000;
   color: #ffffff;
-  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
