@@ -4,27 +4,26 @@ import { LogoIcon } from "./LogoIcon";
 import { footerLinks, socialMedia } from "../constants";
 
 const Footer = () => (
-  <section className="bg-white border-t border-black/5 w-full py-16 px-8 md:px-16 flex flex-col items-center relative z-10">
-    <div className="max-w-[88rem] w-full flex flex-col md:flex-row justify-between items-start gap-10 mb-12">
+  <section className="bg-white border-t border-black/5 w-full py-10 px-8 md:px-16 flex flex-col items-center relative z-10">
+    <div className="max-w-[88rem] w-full flex flex-col md:flex-row justify-between items-start gap-8 mb-8">
       <div className="flex flex-col items-start max-w-sm">
         <div className="flex items-center gap-2 select-none mb-4">
           <LogoIcon className="w-7 h-7 text-black/90" />
-          <span className="text-[22px] font-semibold tracking-[-0.03em] text-black">
+          <span className="text-[20px] font-medium tracking-[-0.03em] text-black">
             WealthPulse
           </span>
         </div>
-        <p className="text-black/60 text-sm leading-relaxed">
-          An automated, reward-powered digital dollar built for native passive earnings and effortless connection into DeFi.
-        </p>
+        <p className="text-black/55 text-sm leading-relaxed max-w-[320px]">
+          Track markets, discover opportunities, and grow your wealth through intelligent insights across stocks, mutual funds, and digital assets. </p>
       </div>
 
-      <div className="flex flex-wrap gap-12 md:gap-24">
+      <div className="flex flex-wrap gap-10 md:gap-16">
         {footerLinks.map((footerlink) => (
           <div key={footerlink.title} className="flex flex-col min-w-[120px]">
             <h4 className="font-semibold text-xs tracking-wider text-black uppercase mb-4">
               {footerlink.title}
             </h4>
-            <ul className="flex flex-col gap-3">
+            <ul className="flex flex-col gap-2">
               {footerlink.links.map((link) => (
                 <li key={link.name}>
                   <a
@@ -43,7 +42,7 @@ const Footer = () => (
       </div>
     </div>
 
-    <div className="max-w-[88rem] w-full pt-8 border-t border-black/5 flex flex-col md:flex-row justify-between items-center gap-6">
+    <div className="max-w-[88rem] w-full pt-6 border-t border-black/5 flex flex-col md:flex-row justify-between items-center gap-6">
       <p className="text-black/40 text-sm">
         Copyright Ⓒ 2026 WealthPulse. All rights reserved.
       </p>
@@ -55,7 +54,7 @@ const Footer = () => (
             href={social.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="opacity-60 hover:opacity-100 transition-opacity duration-200 invert"
+            className="opacity-50 hover:opacity-100 transition-opacity duration-200 invert"
           >
             <img
               src={social.icon.src}
