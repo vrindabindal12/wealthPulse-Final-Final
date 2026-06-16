@@ -14,10 +14,10 @@ const heroBrands = [
 
 export const HeroSection = () => {
   return (
-    <section className="flex-1 px-6 pt-20 pb-6 flex items-end">
+    <section className="flex-1 px-6 pt-16 md:pt-20 pb-4 md:pb-6 flex items-end">
       <div
         className="relative w-full rounded-2xl overflow-hidden"
-        style={{ height: 'calc(100vh - 96px)' }}
+        style={{ height: 'calc(100vh - 140px)', minHeight: '480px' }}
       >
         {/* Background Video */}
         <video
@@ -30,7 +30,7 @@ export const HeroSection = () => {
         />
 
         {/* Content Overlay */}
-        <div className="relative z-10 flex flex-col items-start justify-between h-full p-6 md:p-12 pt-12 md:pt-20 hero-overlay">
+        <div className="relative z-10 flex flex-col items-start justify-between h-full px-6 md:px-12 pt-8 md:pt-12 pb-6 md:pb-8 hero-overlay">
           <div className="flex flex-col items-start">
             <h1
               className="text-black text-5xl md:text-6xl font-medium leading-tight max-w-xl mb-4 tracking-tight"
@@ -40,7 +40,7 @@ export const HeroSection = () => {
             </h1>
 
             <p
-              className="text-black/70 text-base md:text-lg max-w-md mb-8 leading-relaxed font-sans hero-p"
+              className="text-black/70 text-base md:text-lg max-w-md mb-4 md:mb-6 leading-relaxed font-sans hero-p"
               style={{ fontFamily: "'Inter', ui-sans-serif, system-ui, sans-serif" }}
             >
               An automated, reward-powered digital dollar built for native passive earnings and effortless connection into DeFi.
@@ -55,7 +55,7 @@ export const HeroSection = () => {
           </div>
 
           {/* Brand Marquee */}
-          <div className="mt-8 w-full max-w-md overflow-hidden hero-marquee-container">
+          <div className="mt-4 md:mt-6 w-full max-w-md overflow-hidden hero-marquee-container">
             <div className="marquee-track">
               {/* First iteration */}
               {heroBrands.map((brand, idx) => (
