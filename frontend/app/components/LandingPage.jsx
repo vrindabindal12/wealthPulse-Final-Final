@@ -2,8 +2,11 @@
 
 import Navbar from "./Navbar";
 import { HeroSection } from "./Hero";
+import { BackedBySection } from "./BackedBySection";
 import { InfoSection } from "./InfoSection";
+import { UseCasesSection } from "./UseCasesSection";
 import Footer from "./Footer";
+
 
 export default function LandingPage() {
   return (
@@ -11,6 +14,8 @@ export default function LandingPage() {
       <Navbar />
       <HeroSection />
       <InfoSection />
+      <BackedBySection />
+      <UseCasesSection />
       <Footer />
     </div>
   );
