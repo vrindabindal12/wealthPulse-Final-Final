@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import useUser, { loginHref } from "@/lib/authClient";
+import { motion } from 'framer-motion';
 
 export const InfoSection = () => {
   const { isSignedIn } = useUser();
@@ -33,9 +34,15 @@ export const InfoSection = () => {
             </Link>
           </div>
           <div>
-            <p className="text-black/70 text-2xl md:text-3xl leading-relaxed">
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="text-black/70 text-2xl md:text-3xl leading-relaxed"
+            >
               WealthPulse is an AI-powered portfolio cockpit that gives you institutional-grade analytics, risk assessments, and conversational guidance.
-            </p>
+            </motion.p>
           </div>
         </div>
 
