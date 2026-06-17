@@ -1,8 +1,17 @@
+"use client";
+
+import { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
+import useUser, { loginHref } from "@/lib/authClient";
 
 export const InfoSection = () => {
+  const { isSignedIn } = useUser();
+  const targetHref = isSignedIn ? "/Portfolio" : `${loginHref}?screen_hint=signup`;
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+
   return (
-    <section className="bg-[#F5F5F5] px-6 py-24">
+    <section className="bg-[#F5F5F5] px-6 py-24" id="features">
       <div className="max-w-[88rem] mx-auto">
         {/* Row 1: Intro Text */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16 items-start">
@@ -11,62 +20,94 @@ export const InfoSection = () => {
               className="text-black text-4xl md:text-5xl font-medium leading-tight mb-8 tracking-tight"
               style={{ letterSpacing: '-0.03em' }}
             >
-              Meet USD Halo.
+              Meet WealthPulse.
             </h2>
-            <button className="inline-flex items-center gap-3 bg-black text-white text-base font-medium pl-6 pr-1.5 py-1.5 rounded-full hover:bg-gray-800 transition-colors duration-200">
-              <span>Discover it</span>
+            <Link 
+              href={targetHref}
+              className="inline-flex items-center gap-3 bg-black text-white text-base font-medium pl-6 pr-1.5 py-1.5 rounded-full hover:bg-gray-800 transition-colors duration-200"
+            >
+              <span>Explore dashboard</span>
               <span className="bg-white rounded-full p-1.5 flex items-center justify-center">
                 <ArrowRight className="w-4 h-4 text-black" />
               </span>
-            </button>
+            </Link>
           </div>
           <div>
             <p className="text-black/70 text-2xl md:text-3xl leading-relaxed">
-              USD Halo is a reward-earning dollar coin that lets your savings grow while remaining tied to the U.S. dollar.
+              WealthPulse is an AI-powered portfolio cockpit that gives you institutional-grade analytics, risk assessments, and conversational guidance.
             </p>
           </div>
         </div>
 
-        {/* Row 2: 4-Column Card Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Row 2: Card Grid/Flex Layout */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-row gap-4 w-full">
           
-          {/* Card 1: Savings that bloom (Spans 2 columns on lg) */}
+          {/* Card 1: Unified Tracking */}
           <div 
-            className="rounded-2xl p-7 min-h-80 flex flex-col justify-between lg:col-span-2 relative overflow-hidden"
+            onMouseEnter={() => setHoveredCard(1)}
+            onMouseLeave={() => setHoveredCard(null)}
+            className="rounded-2xl p-7 min-h-80 flex flex-col justify-between relative overflow-hidden"
             style={{
               backgroundImage: `url('https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260423_164207_f243351d-ed59-48ec-83a0-a5e996bdbe3c.png&w=1280&q=85')`,
               backgroundSize: 'cover',
-              backgroundPosition: 'center'
+              backgroundPosition: 'center',
+              flexGrow: hoveredCard === 2 || hoveredCard === 3 ? 1 : 2,
+              flexShrink: 1,
+              flexBasis: '0%',
+              willChange: 'flex-grow',
+              transition: 'flex-grow 1.2s cubic-bezier(0.4, 0, 0.2, 1)'
             }}
           >
             <h3 
               className="text-black text-2xl font-medium leading-snug tracking-tight"
               style={{ letterSpacing: '-0.02em' }}
             >
-              Savings that bloom
+              Unified tracking
             </h3>
             <p className="text-black/70 text-base max-w-xs">
-              Gain steady returns as your dollar tokens are routed into top-performing DeFi strategies.
+              Consolidate your Indian stocks, mutual funds, and crypto holdings in one single screen.
             </p>
           </div>
 
-          {/* Card 2: Always fluid, always pegged */}
-          <div className="bg-[#2B2644] rounded-2xl p-7 min-h-80 flex flex-col justify-between">
+          {/* Card 2: Deep Risk Analytics */}
+          <div 
+            onMouseEnter={() => setHoveredCard(2)}
+            onMouseLeave={() => setHoveredCard(null)}
+            className="bg-[#2B2644] rounded-2xl p-7 min-h-80 flex flex-col justify-between"
+            style={{
+              flexGrow: hoveredCard === 2 ? 2 : 1,
+              flexShrink: 1,
+              flexBasis: '0%',
+              willChange: 'flex-grow',
+              transition: 'flex-grow 1.2s cubic-bezier(0.4, 0, 0.2, 1)'
+            }}
+          >
             <h3 className="text-white text-2xl font-medium leading-snug whitespace-pre-line tracking-tight">
-              Always fluid,{"\n"}always pegged.
+              Deep risk{"\n"}analytics.
             </h3>
             <p className="text-white/60 text-base">
-              Keep fully dollar-anchored with on-demand access to funds — no lockups or waits.
+              Monitor Volatility, Sharpe ratio, and 1-year Monte Carlo simulations dynamically.
             </p>
           </div>
 
-          {/* Card 3: Fully automated */}
-          <div className="bg-[#2B2644] rounded-2xl p-7 min-h-80 flex flex-col justify-between">
+          {/* Card 3: AI-Powered Guidance */}
+          <div 
+            onMouseEnter={() => setHoveredCard(3)}
+            onMouseLeave={() => setHoveredCard(null)}
+            className="bg-[#2B2644] rounded-2xl p-7 min-h-80 flex flex-col justify-between"
+            style={{
+              flexGrow: hoveredCard === 3 ? 2 : 1,
+              flexShrink: 1,
+              flexBasis: '0%',
+              willChange: 'flex-grow',
+              transition: 'flex-grow 1.2s cubic-bezier(0.4, 0, 0.2, 1)'
+            }}
+          >
             <h3 className="text-white text-2xl font-medium leading-snug whitespace-pre-line tracking-tight">
-              Fully{"\n"}automated
+              AI-powered{"\n"}guidance
             </h3>
             <p className="text-white/60 text-base">
-              Skip the task of tuning positions yourself. USD Halo runs in the background for you.
+              Get insights from AI Dost and download custom portfolio reports automatically.
             </p>
           </div>
 
