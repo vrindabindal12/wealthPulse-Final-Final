@@ -1,6 +1,8 @@
 "use client";
 
 import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
+import useUser, { loginHref } from "@/lib/authClient";
 
 const heroBrands = [
   { name: 'Stripe', style: { fontFamily: 'Georgia, serif', fontWeight: 700, letterSpacing: '-0.02em', fontSize: '15px' } },
@@ -13,6 +15,9 @@ const heroBrands = [
 ];
 
 export const HeroSection = () => {
+  const { isSignedIn } = useUser();
+  const targetHref = isSignedIn ? "/Portfolio" : `${loginHref}?screen_hint=signup`;
+
   return (
     <section className="flex-1 px-6 pt-16 md:pt-20 pb-4 md:pb-6 flex items-end">
       <div
@@ -36,22 +41,25 @@ export const HeroSection = () => {
               className="text-black text-5xl md:text-6xl font-medium leading-tight max-w-xl mb-4 tracking-tight"
               style={{ letterSpacing: '-0.04em' }}
             >
-              Your Wealth<br />Works
+              The Pulse of<br /> <i>Your Wealth</i>
             </h1>
 
             <p
               className="text-black/70 text-base md:text-lg max-w-md mb-4 md:mb-6 leading-relaxed font-sans hero-p"
               style={{ fontFamily: "'Inter', ui-sans-serif, system-ui, sans-serif" }}
             >
-              An automated, reward-powered digital dollar built for native passive earnings and effortless connection into DeFi.
+              An AI-powered portfolio cockpit for retail investors. Track stocks, mutual funds, and crypto in one place with real-time risk/return analytics and smart AI guidance.
             </p>
 
-            <button className="inline-flex items-center gap-3 bg-black text-white text-base md:text-lg font-medium pl-8 pr-2 py-2 rounded-full hover:bg-gray-800 transition-colors duration-200">
-              <span>Join us</span>
+            <Link
+              href={targetHref}
+              className="inline-flex items-center gap-3 bg-black text-white text-base md:text-lg font-medium pl-8 pr-2 py-2 rounded-full hover:bg-gray-800 transition-colors duration-200"
+            >
+              <span>Get started</span>
               <span className="bg-white rounded-full p-2 flex items-center justify-center">
                 <ArrowRight className="w-5 h-5 text-black" />
               </span>
-            </button>
+            </Link>
           </div>
 
           {/* Brand Marquee */}
