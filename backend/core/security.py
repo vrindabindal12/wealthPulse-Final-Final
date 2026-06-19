@@ -13,13 +13,8 @@ bearer_scheme = HTTPBearer()
 
 @lru_cache(maxsize=1)
 def _fetch_jwks() -> dict:
-    """Fetch Auth0 JWKS synchronously (cached for the process lifetime).
-
-    python-jose requires a dict of the JWKS. The lru_cache means we only
-    hit the network once per worker process. If Auth0 ever rotates keys,
-    restart the server (or bump maxsize / add a TTL wrapper).
-    """
-    url = f"https://{settings.AUTH0_DOMAIN}/.well-known/jwks.json"
+    """Fetch Clerk JWKS synchronously (cached for the process lifetime)."""
+    url = f"{settings.CLERK_API_URL}/.well-known/jwks.json"
     resp = httpx.get(url, timeout=10)
     resp.raise_for_status()
     return resp.json()
@@ -46,7 +41,7 @@ def _get_signing_key(token: str, jwks: dict):
 
 
 async def get_current_user(request: Request):
-    """Validate JWT token from Auth0 with signature, audience, and issuer verification."""
+    """Validate JWT token from Clerk with signature and issuer verification."""
     auth = request.headers.get("Authorization", "")
     if not auth.startswith("Bearer "):
         print("[JWT] No Bearer token found in Authorization header")
@@ -56,7 +51,7 @@ async def get_current_user(request: Request):
     try:
         print(f"[JWT] Validating token (first 50 chars): {token[:50]}...")
 
-        # Fetch JWKS from Auth0
+        # Fetch JWKS from Clerk
         jwks = _fetch_jwks()
         print(f"[JWT] JWKS fetched, contains {len(jwks.get('keys', []))} keys")
 
@@ -69,8 +64,8 @@ async def get_current_user(request: Request):
             token,
             signing_key,
             algorithms=ALGORITHMS,
-            audience=settings.AUTH0_AUDIENCE,
-            issuer=f"https://{settings.AUTH0_DOMAIN}/",
+            issuer=settings.CLERK_API_URL,
+            options={"verify_aud": False},
         )
         print(f"[JWT] Token validated successfully, subject: {payload.get('sub')}")
         return payload

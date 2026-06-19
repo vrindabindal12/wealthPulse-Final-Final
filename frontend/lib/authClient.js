@@ -1,47 +1,26 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useUser as useClerkUser, useClerk } from '@clerk/nextjs';
 
 export function useUser() {
-  const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        console.log('Fetching user data...');
-        const response = await fetch('/api/auth/me');
-        
-        if (response.ok) {
-          const userData = await response.json();
-          console.log('User data received:', userData.email || userData.sub);
-          setUser(userData);
-        } else {
-          console.log('User fetch failed:', response.status, response.statusText);
-          setUser(null);
-        }
-      } catch (err) {
-        console.error('User fetch error:', err);
-        setError(err);
-        setUser(null);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchUser();
-  }, []);
+  const { user, isLoaded } = useClerkUser();
+  const { signOut } = useClerk();
 
   return {
-    user: user || null,
-    isSignedIn: !!user && !isLoading,
-    isLoading,
-    error,
+    user: user ? {
+      email: user.emailAddresses[0]?.emailAddress || "",
+      name: user.fullName || user.username || user.emailAddresses[0]?.emailAddress?.split('@')[0] || "User",
+      sub: user.id,
+      picture: user.imageUrl || "/vercel.svg",
+    } : null,
+    isSignedIn: !!user,
+    isLoading: !isLoaded,
+    error: null,
+    signOut,
   };
 }
 
-export const loginHref = "/api/auth/login";
-export const logoutHref = "/api/auth/logout";
+export const loginHref = "/sign-in";
+export const logoutHref = "/sign-in";
 
 export default useUser;

@@ -1,5 +1,8 @@
+"use client";
+
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import useUser, { loginHref, logoutHref } from "@/lib/authClient";
 import gsap from "gsap";
 import { LogoIcon } from "./LogoIcon";
@@ -39,7 +42,10 @@ function MagneticButton({ children, href, className, onClick }) {
 }
 
 export const Navbar = () => {
-  const { isSignedIn, user, isLoading } = useUser();
+  const pathname = usePathname();
+  const isDarkPage = pathname ? pathname !== "/" : false;
+
+  const { isSignedIn, user, isLoading, signOut } = useUser();
   const [menuOpen, setMenuOpen] = useState(false);
   const navRef = useRef(null);
 
@@ -51,12 +57,33 @@ export const Navbar = () => {
     }
   }, []);
 
+  const handleLinkClick = (e, label) => {
+    if (label === "Features" && (pathname === "/" || pathname === "")) {
+      e.preventDefault();
+      const target = document.getElementById("features");
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
+
+  const handleMobileLinkClick = (e, label) => {
+    setMenuOpen(false);
+    if (label === "Features" && (pathname === "/" || pathname === "")) {
+      e.preventDefault();
+      const target = document.getElementById("features");
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
+
   return (
     <header ref={navRef} className="absolute top-0 left-0 right-0 z-20">
       <div className="max-w-[88rem] mx-auto px-8 md:px-12 py-5 flex items-center justify-between">
         {/* Left Logo */}
-        <Link href="/" className="flex items-center gap-2 select-none ml-2 md:ml-6">
-          <LogoIcon className="w-7 h-7 text-black/90" />
+        <Link href="/" className={`flex items-center gap-2 select-none ml-2 md:ml-6 ${isDarkPage ? "text-white" : "text-black"}`}>
+          <LogoIcon className={`w-7 h-7 ${isDarkPage ? "text-white/90" : "text-black/90"}`} />
           <span className="text-[24px] font-medium tracking-[-0.03em]">
             WealthPulse
           </span>
@@ -74,7 +101,8 @@ export const Navbar = () => {
             <Link
               key={label}
               href={href}
-              className="text-[15px] font-medium text-black/65 hover:text-black tracking-[-0.01em] transition-colors duration-200"
+              onClick={(e) => handleLinkClick(e, label)}
+              className={`text-[15px] font-medium tracking-[-0.01em] transition-colors duration-200 ${isDarkPage ? "text-white/65 hover:text-white" : "text-black/65 hover:text-black"}`}
             >
               {label}
             </Link>
@@ -86,23 +114,26 @@ export const Navbar = () => {
           {isLoading ? (
             <div className="w-24 h-10 bg-gray-200 rounded-full animate-pulse" />
           ) : isSignedIn && user ? (
-            <div className="flex items-center gap-3 rounded-full px-3 py-2 bg-black text-white">
+            <div className={`flex items-center gap-3 rounded-full px-3 py-2 ${isDarkPage ? "bg-white text-black" : "bg-black text-white"}`}>
               <img src={user.picture || "/vercel.svg"} alt={user.name} className="w-6 h-6 rounded-full border border-white/20" />
-              <a href={logoutHref} className="text-xs font-semibold text-gray-300 hover:text-white transition-colors">
+              <button
+                onClick={() => signOut({ redirectUrl: "/" })}
+                className={`text-xs font-semibold transition-colors bg-transparent border-0 cursor-pointer p-0 font-sans ${isDarkPage ? "text-black/70 hover:text-black" : "text-gray-300 hover:text-white"}`}
+              >
                 Sign out
-              </a>
+              </button>
             </div>
           ) : (
             <div className="flex items-center gap-8">
               <a
                 href={loginHref}
-                className="text-[15px] font-medium text-black/65 hover:text-black tracking-[-0.01em] transition-colors duration-200"
+                className={`text-[15px] font-medium tracking-[-0.01em] transition-colors duration-200 ${isDarkPage ? "text-white/65 hover:text-white" : "text-black/65 hover:text-black"}`}
               >
                 Sign in
               </a>
               <MagneticButton
                 href={`${loginHref}?screen_hint=signup`}
-                className="inline-flex items-center justify-center bg-black text-white text-[15px] font-medium tracking-[-0.01em] px-6 py-2 rounded-full transition-colors duration-200 hover:bg-gray-800"
+                className={`inline-flex items-center justify-center text-[15px] font-medium tracking-[-0.01em] px-6 py-2 rounded-full transition-colors duration-200 ${isDarkPage ? "bg-white text-black hover:bg-gray-200" : "bg-black text-white hover:bg-gray-800"}`}
               >
                 Get Started
               </MagneticButton>
@@ -116,15 +147,15 @@ export const Navbar = () => {
           onClick={() => setMenuOpen((o) => !o)}
           aria-label="Toggle Menu"
         >
-          <span className={`w-5 h-0.5 bg-black transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
-          <span className={`w-5 h-0.5 bg-black transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
-          <span className={`w-5 h-0.5 bg-black transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+          <span className={`w-5 h-0.5 transition-all duration-300 ${isDarkPage ? "bg-white" : "bg-black"} ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
+          <span className={`w-5 h-0.5 transition-all duration-300 ${isDarkPage ? "bg-white" : "bg-black"} ${menuOpen ? "opacity-0" : ""}`} />
+          <span className={`w-5 h-0.5 transition-all duration-300 ${isDarkPage ? "bg-white" : "bg-black"} ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
         </button>
       </div>
 
       {/* Mobile Menu Panel */}
       {menuOpen && (
-        <nav className="md:hidden bg-[#F5F5F5] border-t border-black/5 px-6 py-6 flex flex-col gap-4 shadow-2xl">
+        <nav className={`md:hidden border-t px-6 py-6 flex flex-col gap-4 shadow-2xl ${isDarkPage ? "bg-[#0b0b12] border-white/5" : "bg-[#F5F5F5] border-black/5"}`}>
           {[
             ["Features", "/#features"],
             ["Stocks", "/StockDashboard"],
@@ -135,37 +166,40 @@ export const Navbar = () => {
             <Link
               key={label}
               href={href}
-              className="text-black/70 hover:text-black font-semibold text-base py-2 px-4 rounded-xl hover:bg-black/5 transition-all"
-              onClick={() => setMenuOpen(false)}
+              className={`font-semibold text-base py-2 px-4 rounded-xl transition-all ${isDarkPage ? "text-white/70 hover:text-white hover:bg-white/5" : "text-black/70 hover:text-black hover:bg-black/5"}`}
+              onClick={(e) => handleMobileLinkClick(e, label)}
             >
               {label}
             </Link>
           ))}
-          <div className="mt-4 pt-4 border-t border-black/10 flex flex-col gap-3">
+          <div className={`mt-4 pt-4 border-t flex flex-col gap-3 ${isDarkPage ? "border-white/10" : "border-black/10"}`}>
             {isLoading ? (
               <div className="w-full h-12 bg-black/5 rounded-full animate-pulse" />
             ) : isSignedIn && user ? (
-              <div className="flex items-center justify-between bg-black text-white p-3 rounded-full px-5">
+              <div className={`flex items-center justify-between p-3 rounded-full px-5 ${isDarkPage ? "bg-white text-black" : "bg-black text-white"}`}>
                 <div className="flex items-center gap-3">
                   <img src={user.picture || "/vercel.svg"} alt={user.name} className="w-6 h-6 rounded-full" />
                   <span className="text-sm font-semibold truncate max-w-[120px]">{user.name}</span>
                 </div>
-                <a href={logoutHref} className="text-xs font-semibold text-gray-300 hover:text-white transition-colors" onClick={() => setMenuOpen(false)}>
+                <button
+                  onClick={() => { signOut({ redirectUrl: "/" }); setMenuOpen(false); }}
+                  className={`text-xs font-semibold transition-colors bg-transparent border-0 cursor-pointer p-0 font-sans ${isDarkPage ? "text-black/70 hover:text-black" : "text-gray-300 hover:text-white"}`}
+                >
                   Sign out
-                </a>
+                </button>
               </div>
             ) : (
               <>
                 <a
                   href={loginHref}
-                  className="text-center text-sm font-semibold text-black/70 hover:text-black py-3 rounded-xl hover:bg-black/5 transition-colors"
+                  className={`text-center text-sm font-semibold py-3 rounded-xl transition-colors ${isDarkPage ? "text-white/70 hover:text-white hover:bg-white/5" : "text-black/70 hover:text-black hover:bg-black/5"}`}
                   onClick={() => setMenuOpen(false)}
                 >
                   Sign in
                 </a>
                 <Link
                   href={link}
-                  className="inline-flex items-center justify-center bg-black text-white text-[15px] font-medium tracking-[-0.01em] py-3 rounded-full text-center hover:bg-gray-800 transition-colors"
+                  className={`inline-flex items-center justify-center text-[15px] font-medium tracking-[-0.01em] py-3 rounded-full text-center transition-colors ${isDarkPage ? "bg-white text-black hover:bg-gray-200" : "bg-black text-white hover:bg-gray-800"}`}
                   onClick={() => setMenuOpen(false)}
                 >
                   Get Started

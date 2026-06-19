@@ -10,9 +10,8 @@ class Settings(BaseSettings):
     # ── Cache ─────────────────────────────────────────────────────────────────
     REDIS_URL: str
 
-    # ── Auth0 ─────────────────────────────────────────────────────────────────
-    AUTH0_DOMAIN: str                          # e.g. dev-qt0cqogfgwebky55.us.auth0.com
-    AUTH0_AUDIENCE: str = "wealthpulse-local"  # set to AUTH0_CLIENT_ID in production
+    # ── Clerk ─────────────────────────────────────────────────────────────────
+    CLERK_API_URL: str                         # e.g. https://clerk-domain.clerk.accounts.dev
 
     # ── External APIs ─────────────────────────────────────────────────────────
     GROQ_API_KEY: str

@@ -1,108 +1,43 @@
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 
 /**
- * Extract id_token from appSession httpOnly cookie.
- * Properly handles URI-encoded cookie values and values containing "=" signs.
- * @param {Request} request - Next.js request object
- * @returns {{Authorization: string, "Content-Type": string} | null} - Headers object with Bearer token, or null if not found
+ * Extract JWT from Clerk session.
+ * @returns {Promise<{Authorization: string, "Content-Type": string} | null>} - Headers object with Bearer token, or null if not found
  */
-export function getBackendAuthHeaders(request) {
+export async function getBackendAuthHeaders() {
   try {
-    const cookieHeader = request.headers.get("cookie") || "";
+    const { userId, getToken } = await auth();
 
-    if (!cookieHeader) {
-      console.warn("[backendAuth] CRITICAL: No cookie header present at all");
+    if (!userId) {
+      console.warn("[backendAuth] No Clerk userId found (unauthenticated request)");
       return null;
     }
 
-    console.log(
-      `[backendAuth] Cookie header found, length: ${cookieHeader.length}`,
-    );
-
-    // Split cookies properly - handles values with = signs inside
-    const cookies = {};
-    cookieHeader.split(";").forEach((part) => {
-      const idx = part.indexOf("=");
-      if (idx === -1) return;
-      const key = part.slice(0, idx).trim();
-      const val = part.slice(idx + 1).trim();
-      cookies[key] = val;
-    });
-
-    console.log("[backendAuth] Parsed cookies, keys:", Object.keys(cookies));
-
-    const rawSession = cookies["appSession"];
-    if (!rawSession) {
-      console.warn(
-        "[backendAuth] CRITICAL: appSession cookie not found. Available:",
-        Object.keys(cookies),
-      );
-      return null;
-    }
-
-    console.log(`[backendAuth] Found appSession, length: ${rawSession.length}`);
-
-    // Decode URI encoding if present
-    let sessionStr = rawSession;
-    try {
-      sessionStr = decodeURIComponent(rawSession);
-    } catch {
-      // Not URI encoded, use as-is
-    }
-
-    // Parse JSON session
-    let sessionData;
-    try {
-      sessionData = JSON.parse(sessionStr);
-    } catch (e) {
-      console.warn("[backendAuth] Failed to parse appSession JSON:", e.message);
-      console.warn(
-        "[backendAuth] Raw session (first 100 chars):",
-        sessionStr.slice(0, 100),
-      );
-      return null;
-    }
-
-    console.log(
-      "[backendAuth] Parsed session, keys:",
-      Object.keys(sessionData),
-    );
-
-    // Prefer access_token (has audience claim), fallback to id_token
-    const token = sessionData.access_token || sessionData.id_token;
+    const token = await getToken();
     if (!token) {
-      console.warn(
-        "[backendAuth] CRITICAL: No token found in session. Keys:",
-        Object.keys(sessionData),
-      );
+      console.warn("[backendAuth] Failed to retrieve JWT token from Clerk");
       return null;
     }
 
-    const tokenType = sessionData.access_token ? "access_token" : "id_token";
-    console.log(
-      `[backendAuth] Token extracted successfully, type: ${tokenType}, length: ${token.length}`,
-    );
-
-    const headers = {
+    console.log(`[backendAuth] Successfully retrieved Clerk token for user ${userId}`);
+    return {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     };
-
-    console.log("[backendAuth] Returning auth headers with Bearer token");
-    return headers;
   } catch (err) {
-    console.error("[backendAuth] Unexpected error:", err.message);
+    console.error("[backendAuth] Unexpected error retrieving Clerk token:", err.message);
     return null;
   }
 }
 
 /**
  * Forward any HTTP method (GET, POST, DELETE, PUT) to backend.
- * Auth headers are attached server-side from appSession cookie.
+ * Auth headers are attached server-side from Clerk session.
  * Body is only forwarded for methods that can have a body.
  */
 export async function forwardToBackend(request, backendUrl, options = {}) {
-  const authHeaders = await getBackendAuthHeaders(request);
+  const authHeaders = await getBackendAuthHeaders();
 
   if (!authHeaders) {
     console.warn(
@@ -165,3 +100,4 @@ export async function forwardToBackend(request, backendUrl, options = {}) {
     );
   }
 }
+
