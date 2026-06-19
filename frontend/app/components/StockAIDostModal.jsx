@@ -68,27 +68,30 @@ const StockAIDostModal = ({ isOpen, onClose, stockData }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-[#181f31] rounded-xl w-full max-w-4xl h-[80vh] flex flex-col relative border border-gray-700">
-        <div className="flex justify-between items-center p-6 border-b border-gray-700">
-          <h2 className="text-xl font-bold text-white">Stock Analysis</h2>
+    <div className="fixed inset-0 bg-black/45 backdrop-blur-xs z-50 flex items-center justify-center p-4 animate-fade-in">
+      <div className="bg-white rounded-[2rem] w-full max-w-4xl h-[80vh] flex flex-col relative border border-black/10 shadow-2xl">
+        <div className="flex justify-between items-center p-6 border-b border-black/5 bg-white">
+          <div>
+            <h2 className="text-2xl font-bold text-black tracking-[-0.02em]">Stock Analysis</h2>
+            <p className="text-black/40 text-xs font-semibold">AI-driven analysis report</p>
+          </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-black/40 hover:text-black hover:bg-black/5 w-8 h-8 rounded-full flex items-center justify-center text-lg transition-all cursor-pointer"
           >
             ✕
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto p-6 bg-[#F5F5F5]">
           {!response && !loading && (
-            <div className="flex flex-col items-center justify-center h-full gap-4">
-              <p className="text-gray-400 text-center">
+            <div className="flex flex-col items-center justify-center h-full gap-4 max-w-md mx-auto text-center">
+              <p className="text-black/60 font-medium leading-relaxed">
                 Click the button below to generate an AI-powered analysis of this stock.
               </p>
               <button
                 onClick={generateResponse}
-                className="bg-gradient-to-r from-purple-600 to-cyan-500 hover:from-purple-700 hover:to-cyan-600 text-white px-6 py-3 rounded-lg font-semibold transition-all transform hover:scale-105"
+                className="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-full font-semibold transition-all transform hover:scale-[1.02] shadow-xs cursor-pointer text-sm"
               >
                 Generate Analysis
               </button>
@@ -97,23 +100,25 @@ const StockAIDostModal = ({ isOpen, onClose, stockData }) => {
 
           {loading && (
             <div className="flex flex-col items-center justify-center h-full gap-4">
-              <div className="animate-spin rounded-full h-12 w-12 border-4 border-purple-500 border-t-transparent"></div>
-              <p className="text-gray-400">Generating analysis...</p>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
+              <p className="text-black/60 text-lg font-medium">Generating analysis...</p>
             </div>
           )}
 
           {response && !loading && (
-            <div className="prose prose-invert max-w-none">
-              <div className="whitespace-pre-wrap">{response}</div>
+            <div className="bg-white border border-black/5 rounded-[1.5rem] p-6 text-black shadow-xs max-w-3xl mx-auto">
+              <div className="prose max-w-none text-black/80 whitespace-pre-wrap leading-relaxed">
+                {response}
+              </div>
             </div>
           )}
         </div>
 
         {response && (
-          <div className="p-6 border-t border-gray-700">
+          <div className="p-6 border-t border-black/5 bg-[#F5F5F5]">
             <button
               onClick={generateResponse}
-              className="w-full bg-gradient-to-r from-purple-600 to-cyan-500 hover:from-purple-700 hover:to-cyan-600 text-white px-6 py-3 rounded-lg font-semibold transition-all transform hover:scale-105"
+              className="w-full bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-full font-semibold transition-all transform hover:scale-[1.01] shadow-xs cursor-pointer text-sm"
             >
               Regenerate Analysis
             </button>

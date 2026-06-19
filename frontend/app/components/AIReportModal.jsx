@@ -93,29 +93,31 @@ export default function AIReportModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-      <div className="bg-[#181f31] rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-gray-700">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 backdrop-blur-xs p-4 animate-fade-in">
+      <div className="bg-white rounded-[2rem] max-w-5xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-black/10 flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-6 flex justify-between items-center">
+        <div className="bg-white border-b border-black/5 p-6 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <svg
-              className="w-8 h-8 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
+            <div className="p-2.5 bg-black/5 rounded-2xl text-black">
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+            </div>
             <div>
-              <h2 className="text-2xl font-bold text-white">
+              <h2 className="text-2xl font-bold text-black tracking-[-0.02em]">
                 AI Investment Report
               </h2>
-              <p className="text-purple-100 text-sm">
+              <p className="text-black/40 text-xs font-semibold">
                 {useBackend
                   ? "Portfolio Analysis & Insights"
                   : "Comprehensive Analysis & Insights"}
@@ -124,44 +126,32 @@ export default function AIReportModal({
           </div>
           <button
             onClick={onClose}
-            className="text-white hover:bg-white/20 rounded-lg p-2 transition-colors"
+            className="text-black/40 hover:text-black hover:bg-black/5 w-8 h-8 rounded-full flex items-center justify-center text-lg transition-all cursor-pointer"
           >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+            ✕
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
+        <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)] bg-[#F5F5F5] flex-1">
           {loading && (
-            <div className="flex flex-col items-center justify-center py-12">
-              <div className="animate-spin border-4 border-purple-400 border-t-transparent rounded-full w-12 h-12 mb-4"></div>
-              <p className="text-gray-400 text-lg">
+            <div className="flex flex-col items-center justify-center py-16">
+              <div className="animate-spin border-4 border-black border-t-transparent rounded-full w-12 h-12 mb-4"></div>
+              <p className="text-black/60 text-lg font-medium">
                 Generating comprehensive report... 📊
               </p>
-              <p className="text-gray-500 text-sm mt-2">
+              <p className="text-black/40 text-sm mt-1 font-semibold">
                 This may take a moment
               </p>
             </div>
           )}
 
           {error && (
-            <div className="bg-red-900/30 border border-red-600 rounded-lg p-4 text-red-400">
-              <p className="font-semibold">Error: {error}</p>
+            <div className="bg-red-500/5 border border-red-500/10 rounded-2xl p-6 text-red-600 max-w-xl mx-auto text-center shadow-xs">
+              <p className="font-semibold mb-3">Error: {error}</p>
               <button
                 onClick={generateReport}
-                className="mt-3 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm"
+                className="bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-full text-sm font-semibold transition-all cursor-pointer"
               >
                 Try Again
               </button>
@@ -169,71 +159,71 @@ export default function AIReportModal({
           )}
 
           {aiResponse && (
-            <div className="bg-[#232b44] rounded-lg p-6 text-white">
+            <div className="bg-white border border-black/5 rounded-[1.5rem] p-6 text-black shadow-xs max-w-4xl mx-auto">
               {aiResponse.format === "markdown" ? (
                 <ReactMarkdown
-                  className="prose prose-invert max-w-none"
+                  className="prose max-w-none"
                   components={{
                     p: ({ node, ...props }) => (
                       <p
-                        className="text-gray-100 leading-relaxed my-2"
+                        className="text-black/80 leading-relaxed my-2"
                         {...props}
                       />
                     ),
                     h1: ({ node, ...props }) => (
                       <h1
-                        className="text-2xl font-bold text-purple-300 mt-5 mb-3"
+                        className="text-xl font-bold text-black mt-6 mb-3 tracking-[-0.015em]"
                         {...props}
                       />
                     ),
                     h2: ({ node, ...props }) => (
                       <h2
-                        className="text-xl font-bold text-pink-300 mt-4 mb-2"
+                        className="text-lg font-bold text-black mt-5 mb-2 tracking-[-0.01em]"
                         {...props}
                       />
                     ),
                     h3: ({ node, ...props }) => (
                       <h3
-                        className="text-lg font-semibold text-purple-200 mt-3 mb-2"
+                        className="text-base font-semibold text-black/95 mt-4 mb-2"
                         {...props}
                       />
                     ),
                     h4: ({ node, ...props }) => (
                       <h4
-                        className="text-base font-semibold text-pink-200 mt-2 mb-1"
+                        className="text-sm font-semibold text-black/90 mt-3 mb-1"
                         {...props}
                       />
                     ),
                     ul: ({ node, ...props }) => (
-                      <ul className="list-disc pl-6 my-2" {...props} />
+                      <ul className="list-disc pl-6 my-2 text-black/85" {...props} />
                     ),
                     ol: ({ node, ...props }) => (
-                      <ol className="list-decimal pl-6 my-2" {...props} />
+                      <ol className="list-decimal pl-6 my-2 text-black/85" {...props} />
                     ),
                     li: ({ node, ...props }) => (
-                      <li className="text-gray-100 mb-1" {...props} />
+                      <li className="text-black/80 mb-1 leading-relaxed" {...props} />
                     ),
                     strong: ({ node, ...props }) => (
-                      <strong className="font-bold text-pink-200" {...props} />
+                      <strong className="font-bold text-black" {...props} />
                     ),
                     em: ({ node, ...props }) => (
-                      <em className="italic text-gray-200" {...props} />
+                      <em className="italic text-black/90" {...props} />
                     ),
                     blockquote: ({ node, ...props }) => (
                       <blockquote
-                        className="border-l-4 border-purple-500 pl-4 my-2 italic text-gray-300"
+                        className="border-l-4 border-black pl-4 my-2 italic text-black/70 bg-black/[0.02] py-2 rounded-r-lg"
                         {...props}
                       />
                     ),
                     code: ({ node, inline, ...props }) =>
                       inline ? (
                         <code
-                          className="bg-[#1a1f2e] px-2 py-1 rounded text-pink-300"
+                          className="bg-black/5 px-2 py-0.5 rounded text-black font-semibold text-xs"
                           {...props}
                         />
                       ) : (
                         <code
-                          className="bg-[#1a1f2e] p-3 rounded block text-pink-300 overflow-x-auto"
+                          className="bg-black/5 p-4 rounded-xl block text-black overflow-x-auto text-sm my-3 font-semibold"
                           {...props}
                         />
                       ),
@@ -242,7 +232,7 @@ export default function AIReportModal({
                   {aiResponse.text}
                 </ReactMarkdown>
               ) : (
-                <p className="text-gray-100 whitespace-pre-line leading-relaxed">
+                <p className="text-black/80 whitespace-pre-line leading-relaxed">
                   {aiResponse.text}
                 </p>
               )}
@@ -251,16 +241,16 @@ export default function AIReportModal({
         </div>
 
         {/* Footer with Actions */}
-        <div className="bg-[#0d1020] p-4 flex justify-between items-center border-t border-gray-700 flex-wrap gap-3">
-          <p className="text-gray-400 text-sm">
-            📋 Professional AI-generated investment report
+        <div className="bg-[#F5F5F5] px-6 py-4 flex justify-between items-center border-t border-black/5 flex-wrap gap-3">
+          <p className="text-black/40 text-xs font-semibold">
+            💡 Professional AI-generated investment report.
           </p>
           <div className="flex gap-3">
             {aiResponse && (
               <>
                 <button
                   onClick={copyToClipboard}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors flex items-center gap-2 text-sm"
+                  className="bg-black/5 hover:bg-black/10 text-black px-4 py-2 rounded-full font-semibold transition-all flex items-center gap-2 text-xs cursor-pointer border border-black/10"
                 >
                   <svg
                     className="w-4 h-4"
@@ -279,7 +269,7 @@ export default function AIReportModal({
                 </button>
                 <button
                   onClick={downloadReport}
-                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors flex items-center gap-2 text-sm"
+                  className="bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-full font-semibold transition-all flex items-center gap-2 text-xs cursor-pointer shadow-xs"
                 >
                   <svg
                     className="w-4 h-4"
@@ -300,7 +290,7 @@ export default function AIReportModal({
             )}
             <button
               onClick={onClose}
-              className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors"
+              className="bg-black hover:bg-gray-800 text-white px-6 py-2.5 rounded-full font-semibold transition-all transform hover:scale-[1.02] shadow-xs cursor-pointer text-sm"
             >
               Close
             </button>

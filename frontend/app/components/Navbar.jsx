@@ -50,7 +50,7 @@ export const Navbar = () => {
     return null;
   }
 
-  const lightPages = ["/", "/stockdashboard", "/stockdashboard/", "/courses", "/courses/"];
+  const lightPages = ["/", "/stockdashboard", "/stockdashboard/", "/courses", "/courses/", "/cryptodashboard", "/cryptodashboard/", "/mfdashboard", "/mfdashboard/", "/portfolio", "/portfolio/"];
   const isDarkPage = lowerPath && !lightPages.includes(lowerPath);
 
   const { isSignedIn, user, isLoading, signOut } = useUser();
@@ -105,6 +105,7 @@ export const Navbar = () => {
             ["Mutual Funds", "/MFDashboard"],
             ["Crypto", "/CryptoDashboard"],
             ["Education", "/Courses"],
+            ["Portfolio", "/Portfolio"],
           ].map(([label, href]) => (
             <Link
               key={label}
@@ -170,6 +171,7 @@ export const Navbar = () => {
             ["Mutual Funds", "/MFDashboard"],
             ["Crypto", "/CryptoDashboard"],
             ["Education", "/Courses"],
+            ["Portfolio", "/Portfolio"],
           ].map(([label, href]) => (
             <Link
               key={label}

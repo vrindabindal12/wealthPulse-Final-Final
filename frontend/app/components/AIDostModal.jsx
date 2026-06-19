@@ -76,54 +76,47 @@ export default function AIDostModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-      <div className="bg-[#181f31] rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-gray-700">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 backdrop-blur-xs p-4 animate-fade-in">
+      <div className="bg-white rounded-[2rem] max-w-5xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-black/10 flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-cyan-500 to-blue-600 p-6 flex justify-between items-center">
+        <div className="bg-white border-b border-black/5 p-6 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <svg
-              className="w-8 h-8 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-              />
-            </svg>
-            <h2 className="text-2xl font-bold text-white">
-              AI Dost - Your Investment Buddy
-            </h2>
+            <div className="p-2.5 bg-black/5 rounded-2xl text-black">
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                />
+              </svg>
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-black tracking-[-0.02em]">
+                AI Dost
+              </h2>
+              <p className="text-black/40 text-xs font-semibold">Your personal finance companion</p>
+            </div>
           </div>
           <button
             onClick={onClose}
-            className="text-white hover:bg-white/20 rounded-lg p-2 transition-colors"
+            className="text-black/40 hover:text-black hover:bg-black/5 w-8 h-8 rounded-full flex items-center justify-center text-lg transition-all cursor-pointer"
           >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+            ✕
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
+        <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)] bg-[#F5F5F5] flex-1">
           {loading && (
-            <div className="flex flex-col items-center justify-center py-12">
-              <div className="animate-spin border-4 border-cyan-400 border-t-transparent rounded-full w-12 h-12 mb-4"></div>
-              <p className="text-gray-400 text-lg">
+            <div className="flex flex-col items-center justify-center py-16">
+              <div className="animate-spin border-4 border-black border-t-transparent rounded-full w-12 h-12 mb-4"></div>
+              <p className="text-black/60 text-lg font-medium">
                 AI Dost is analyzing{" "}
                 {useBackend ? "your portfolio" : "the fund"}... 🤖
               </p>
@@ -131,11 +124,11 @@ export default function AIDostModal({
           )}
 
           {error && (
-            <div className="bg-red-900/30 border border-red-600 rounded-lg p-4 text-red-400">
-              <p className="font-semibold">Error: {error}</p>
+            <div className="bg-red-500/5 border border-red-500/10 rounded-2xl p-6 text-red-600 max-w-xl mx-auto text-center shadow-xs">
+              <p className="font-semibold mb-3">Error: {error}</p>
               <button
                 onClick={generateSummary}
-                className="mt-3 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm"
+                className="bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-full text-sm font-semibold transition-all cursor-pointer"
               >
                 Try Again
               </button>
@@ -143,53 +136,53 @@ export default function AIDostModal({
           )}
 
           {aiResponse && (
-            <div className="bg-[#232b44] rounded-lg p-6 text-white">
+            <div className="bg-white border border-black/5 rounded-[1.5rem] p-6 text-black shadow-xs max-w-4xl mx-auto">
               {aiResponse.format === "markdown" ? (
                 <ReactMarkdown
-                  className="prose prose-invert max-w-none prose-p:m-2 prose-h1:text-xl prose-h1:font-bold prose-h1:mt-4 prose-h1:mb-2 prose-h2:text-lg prose-h2:font-bold prose-h2:mt-3 prose-h2:mb-2 prose-ul:list-disc prose-ul:pl-4 prose-li:m-1"
+                  className="prose max-w-none prose-p:m-2 prose-h1:text-xl prose-h1:font-bold prose-h1:mt-4 prose-h1:mb-2 prose-h2:text-lg prose-h2:font-bold prose-h2:mt-3 prose-h2:mb-2 prose-ul:list-disc prose-ul:pl-4 prose-li:m-1"
                   components={{
                     p: ({ node, ...props }) => (
-                      <p className="text-gray-100 leading-relaxed" {...props} />
+                      <p className="text-black/80 leading-relaxed mb-4" {...props} />
                     ),
                     h1: ({ node, ...props }) => (
                       <h1
-                        className="text-xl font-bold text-cyan-300 mt-4 mb-2"
+                        className="text-xl font-bold text-black mt-6 mb-3 tracking-[-0.015em]"
                         {...props}
                       />
                     ),
                     h2: ({ node, ...props }) => (
                       <h2
-                        className="text-lg font-bold text-cyan-400 mt-3 mb-2"
+                        className="text-lg font-bold text-black mt-5 mb-2 tracking-[-0.01em]"
                         {...props}
                       />
                     ),
                     h3: ({ node, ...props }) => (
                       <h3
-                        className="text-base font-semibold text-blue-300 mt-2 mb-1"
+                        className="text-base font-semibold text-black/90 mt-4 mb-2"
                         {...props}
                       />
                     ),
                     ul: ({ node, ...props }) => (
-                      <ul className="list-disc pl-6 my-2" {...props} />
+                      <ul className="list-disc pl-6 my-3 text-black/85" {...props} />
                     ),
                     ol: ({ node, ...props }) => (
-                      <ol className="list-decimal pl-6 my-2" {...props} />
+                      <ol className="list-decimal pl-6 my-3 text-black/85" {...props} />
                     ),
                     li: ({ node, ...props }) => (
-                      <li className="text-gray-100 mb-1" {...props} />
+                      <li className="text-black/80 mb-2 leading-relaxed" {...props} />
                     ),
                     strong: ({ node, ...props }) => (
-                      <strong className="font-bold text-cyan-200" {...props} />
+                      <strong className="font-bold text-black" {...props} />
                     ),
                     em: ({ node, ...props }) => (
-                      <em className="italic text-gray-200" {...props} />
+                      <em className="italic text-black/95" {...props} />
                     ),
                   }}
                 >
                   {aiResponse.text}
                 </ReactMarkdown>
               ) : (
-                <p className="text-gray-100 whitespace-pre-line leading-relaxed">
+                <p className="text-black/80 whitespace-pre-line leading-relaxed">
                   {aiResponse.text}
                 </p>
               )}
@@ -198,13 +191,13 @@ export default function AIDostModal({
         </div>
 
         {/* Footer */}
-        <div className="bg-[#0d1020] p-4 flex justify-between items-center border-t border-gray-700">
-          <p className="text-gray-400 text-sm">
-            💡 This is AI-generated advice. Always do your own research!
+        <div className="bg-[#F5F5F5] px-6 py-4 flex justify-between items-center border-t border-black/5">
+          <p className="text-black/40 text-xs font-semibold">
+            💡 AI-generated advice. Please verify before investing.
           </p>
           <button
             onClick={onClose}
-            className="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors"
+            className="bg-black hover:bg-gray-800 text-white px-6 py-2.5 rounded-full font-semibold transition-all transform hover:scale-[1.02] shadow-xs cursor-pointer text-sm"
           >
             Close
           </button>

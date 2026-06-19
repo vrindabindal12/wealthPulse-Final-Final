@@ -266,10 +266,10 @@ export default function PortfolioPage() {
 
   if (!isSignedIn && !isLoading) {
     return (
-      <div className="min-h-screen py-12 px-4 bg-linear-to-b from-[#050511] via-[#0d1020] to-[#0b0b12]">
-        <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-3xl font-bold text-white mb-4">Please Sign In</h1>
-          <p className="text-gray-400">
+      <div className="min-h-screen py-12 px-4 bg-[#F5F5F5] text-black">
+        <div className="max-w-7xl mx-auto text-center mt-12">
+          <h1 className="text-3xl font-bold text-black mb-4">Please Sign In</h1>
+          <p className="text-black/60">
             You need to be signed in to view your portfolio.
           </p>
         </div>
@@ -278,21 +278,21 @@ export default function PortfolioPage() {
   }
 
   return (
-    <div className="min-h-screen py-12 px-4 bg-linear-to-b from-[#050511] via-[#0d1020] to-[#0b0b12]">
+    <div className="min-h-screen py-12 px-4 bg-[#F5F5F5] text-black">
       <div className="max-w-6xl mx-auto mt-12 px-6">
         <div className="mb-8">
           <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-white mb-2">
+              <h1 className="text-3xl font-bold text-black mb-2">
                 My Portfolio
               </h1>
-              <p className="text-gray-400">Manage your finance</p>
+              <p className="text-black/60">Manage your finance</p>
             </div>
 
             <div className="flex gap-4">
               <button
                 onClick={() => setShowAIDost(true)}
-                className="bg-linear-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white px-6 py-2.5 rounded-lg font-semibold text-base transition-all transform hover:scale-105 shadow-lg flex items-center gap-2"
+                className="bg-black text-white hover:bg-gray-800 px-6 py-2.5 rounded-full font-semibold text-base transition-all transform hover:scale-105 shadow-md flex items-center gap-2 cursor-pointer"
               >
                 <svg
                   className="w-5 h-5"
@@ -311,7 +311,7 @@ export default function PortfolioPage() {
               </button>
               <button
                 onClick={() => setShowAIReport(true)}
-                className="bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-2.5 rounded-lg font-semibold text-base transition-all transform hover:scale-105 shadow-lg flex items-center gap-2"
+                className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-6 py-2.5 rounded-full font-semibold text-base transition-all transform hover:scale-105 shadow-md flex items-center gap-2 cursor-pointer"
               >
                 <svg
                   className="w-5 h-5"
@@ -334,15 +334,15 @@ export default function PortfolioPage() {
 
         {loading ? (
           <div className="flex justify-center items-center min-h-[200px]">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
           </div>
         ) : error ? (
-          <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 text-red-400">
+          <div className="bg-red-500/5 border border-red-500/10 rounded-2xl p-4 text-red-600">
             {error}
           </div>
         ) : portfolioItems.length === 0 ? (
-          <div className="text-center py-12 bg-white/5 rounded-lg">
-            <p className="text-gray-400">
+          <div className="text-center py-12 bg-white border border-black/5 rounded-[1.5rem] shadow-xs">
+            <p className="text-black/60 font-medium">
               Your portfolio is empty. Add some stocks or mutual funds from the
               dashboards!
             </p>
@@ -353,17 +353,17 @@ export default function PortfolioPage() {
               <div
                 key={item.id}
                 onClick={() => handleViewHistory(item.symbol, item.name)}
-                className="bg-white/5 rounded-lg p-6 border border-white/10 cursor-pointer hover:bg-white/10 hover:border-white/20 transition-all duration-200"
+                className="bg-white border border-black/5 rounded-[1.5rem] p-6 shadow-xs flex flex-col hover:-translate-y-1.5 hover:scale-[1.02] hover:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.08)] hover:border-black/15 transition-all duration-400 cursor-pointer"
               >
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 className="text-lg font-semibold text-white mb-1">
+                    <h3 className="text-lg font-semibold text-black mb-1">
                       {item.name}
                     </h3>
-                    <p className="text-sm text-gray-400">{item.symbol}</p>
+                    <p className="text-sm text-black/40 font-medium">{item.symbol}</p>
                   </div>
                   <span
-                    className="px-3 py-1 rounded-full text-xs font-medium capitalize"
+                    className="px-3 py-1 rounded-full text-xs font-semibold capitalize"
                     style={{
                       backgroundColor:
                         item.item_type === "stock"
@@ -379,25 +379,25 @@ export default function PortfolioPage() {
                 {/* Investment Details */}
                 <div className="space-y-3 mb-4 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Quantity:</span>
-                    <span className="text-white font-medium">
+                    <span className="text-black/40">Quantity:</span>
+                    <span className="text-black font-medium">
                       {Number(item.quantity).toLocaleString("en-IN", {
                         maximumFractionDigits: 4,
                       })}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Buy Price:</span>
-                    <span className="text-white font-medium">
+                    <span className="text-black/40">Buy Price:</span>
+                    <span className="text-black font-medium">
                       ₹
                       {Number(item.buy_price ?? 0).toLocaleString("en-IN", {
                         maximumFractionDigits: 2,
                       })}
                     </span>
                   </div>
-                  <div className="flex justify-between bg-white/10 rounded px-3 py-2">
-                    <span className="text-gray-300 font-medium">Invested:</span>
-                    <span className="text-green-400 font-bold">
+                  <div className="flex justify-between bg-black/5 rounded-xl px-4 py-2.5">
+                    <span className="text-black/70 font-semibold">Invested:</span>
+                    <span className="text-emerald-600 font-bold">
                       ₹
                       {(
                         Number(item.quantity ?? 0) * Number(item.buy_price ?? 0)
@@ -407,8 +407,8 @@ export default function PortfolioPage() {
                   {item.current_price != null && item.current_price > 0 && (
                     <>
                       <div className="flex justify-between">
-                        <span className="text-gray-400">Current Price:</span>
-                        <span className="text-white font-medium">
+                        <span className="text-black/40">Current Price:</span>
+                        <span className="text-black font-medium">
                           ₹
                           {Number(item.current_price).toLocaleString("en-IN", {
                             maximumFractionDigits: 2,
@@ -416,8 +416,8 @@ export default function PortfolioPage() {
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-400">Current Value:</span>
-                        <span className="text-white font-medium">
+                        <span className="text-black/40">Current Value:</span>
+                        <span className="text-black font-medium">
                           ₹
                           {Number(item.current_value || 0).toLocaleString(
                             "en-IN",
@@ -427,11 +427,11 @@ export default function PortfolioPage() {
                           )}
                         </span>
                       </div>
-                      <div className="flex justify-between bg-white/10 rounded px-3 py-2">
-                        <span className="text-gray-300 font-medium">P&L:</span>
+                      <div className="flex justify-between bg-black/5 rounded-xl px-4 py-2.5">
+                        <span className="text-black/70 font-semibold">P&L:</span>
                         <div className="text-right">
                           <div
-                            className={`font-bold text-lg ${(item._backendHolding?.pnl ?? 0) >= 0 ? "text-green-400" : "text-red-400"}`}
+                            className={`font-bold text-lg ${(item._backendHolding?.pnl ?? 0) >= 0 ? "text-green-600" : "text-red-600"}`}
                           >
                             {(item._backendHolding?.pnl ?? 0) >= 0 ? "+" : ""}₹
                             {Number(
@@ -441,7 +441,7 @@ export default function PortfolioPage() {
                             })}
                           </div>
                           <div
-                            className={`text-sm font-semibold ${(item._backendHolding?.pnl_pct ?? 0) >= 0 ? "text-green-300" : "text-red-300"}`}
+                            className={`text-sm font-semibold ${(item._backendHolding?.pnl_pct ?? 0) >= 0 ? "text-green-500" : "text-red-500"}`}
                           >
                             {(item._backendHolding?.pnl_pct ?? 0) >= 0
                               ? "+"
@@ -457,7 +457,7 @@ export default function PortfolioPage() {
                   )}
                 </div>
 
-                <div className="flex justify-between items-center text-xs text-gray-500 border-t border-white/10 pt-3">
+                <div className="flex justify-between items-center text-xs text-black/40 border-t border-black/5 pt-4 mt-2">
                   <span>
                     Added:{" "}
                     {item._backendHolding?.created_at
@@ -467,8 +467,11 @@ export default function PortfolioPage() {
                       : "—"}
                   </span>
                   <button
-                    onClick={() => handleRemoveItem(item.id)}
-                    className="text-red-400 hover:text-red-300 transition-colors font-medium"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemoveItem(item.id);
+                    }}
+                    className="text-red-500 hover:text-red-600 transition-colors font-semibold cursor-pointer"
                   >
                     Remove
                   </button>
@@ -523,18 +526,18 @@ export default function PortfolioPage() {
 
         {/* Buy History Modal */}
         {showHistoryModal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-[#181f31] rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-gray-700">
-              <div className="sticky top-0 bg-[#181f31] border-b border-gray-700 p-6 flex justify-between items-center">
+          <div className="fixed inset-0 bg-black/45 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-black/10 shadow-2xl flex flex-col">
+              <div className="sticky top-0 bg-white border-b border-black/5 p-6 flex justify-between items-center">
                 <div>
-                  <h2 className="text-2xl font-bold text-white">Buy History</h2>
-                  <p className="text-gray-400">
+                  <h2 className="text-2xl font-bold text-black">Buy History</h2>
+                  <p className="text-black/50 text-sm">
                     {selectedSymbol?.name} ({selectedSymbol?.symbol})
                   </p>
                 </div>
                 <button
                   onClick={() => setShowHistoryModal(false)}
-                  className="text-gray-400 hover:text-white text-2xl"
+                  className="text-black/40 hover:text-black hover:bg-black/5 w-8 h-8 rounded-full flex items-center justify-center text-lg transition-all cursor-pointer"
                 >
                   ×
                 </button>
@@ -542,22 +545,22 @@ export default function PortfolioPage() {
 
               {historyLoading ? (
                 <div className="flex justify-center items-center py-12">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black"></div>
                 </div>
               ) : (
                 <div className="p-6">
                   {/* Aggregated Summary */}
                   {historyData.length > 0 && (
-                    <div className="bg-white/5 rounded-lg p-4 mb-6 border border-white/10">
-                      <h3 className="text-white font-semibold mb-4">
+                    <div className="bg-black/5 rounded-xl p-5 mb-6 border border-black/5">
+                      <h3 className="text-black font-semibold mb-4 text-base">
                         Aggregated Summary
                       </h3>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div>
-                          <div className="text-gray-400 text-sm">
+                          <div className="text-black/50 text-xs mb-1 font-medium">
                             Total Quantity
                           </div>
-                          <div className="text-white font-bold text-lg">
+                          <div className="text-black font-bold text-lg">
                             {historyData
                               .reduce(
                                 (sum, lot) => sum + Number(lot.quantity || 0),
@@ -569,10 +572,10 @@ export default function PortfolioPage() {
                           </div>
                         </div>
                         <div>
-                          <div className="text-gray-400 text-sm">
+                          <div className="text-black/50 text-xs mb-1 font-medium">
                             Total Invested
                           </div>
-                          <div className="text-green-400 font-bold text-lg">
+                          <div className="text-emerald-600 font-bold text-lg">
                             ₹
                             {historyData
                               .reduce(
@@ -588,10 +591,10 @@ export default function PortfolioPage() {
                           </div>
                         </div>
                         <div>
-                          <div className="text-gray-400 text-sm">
+                          <div className="text-black/50 text-xs mb-1 font-medium">
                             Avg Buy Price
                           </div>
-                          <div className="text-white font-bold text-lg">
+                          <div className="text-black font-bold text-lg">
                             ₹
                             {(
                               historyData.reduce(
@@ -611,10 +614,10 @@ export default function PortfolioPage() {
                           </div>
                         </div>
                         <div>
-                          <div className="text-gray-400 text-sm">
+                          <div className="text-black/50 text-xs mb-1 font-medium">
                             Current Value
                           </div>
-                          <div className="text-blue-400 font-bold text-lg">
+                          <div className="text-blue-600 font-bold text-lg">
                             ₹
                             {(selectedItem?.current_price &&
                             selectedItem.current_price > 0
@@ -629,7 +632,7 @@ export default function PortfolioPage() {
                           </div>
                         </div>
                       </div>
-                      <div className="mt-4 pt-4 border-t border-white/10">
+                      <div className="mt-4 pt-4 border-t border-black/10">
                         {(() => {
                           const totalInvested = historyData.reduce(
                             (sum, lot) =>
@@ -653,12 +656,12 @@ export default function PortfolioPage() {
 
                           return (
                             <div className="flex justify-between items-center">
-                              <span className="text-gray-300 font-medium">
+                              <span className="text-black/70 font-semibold">
                                 Profit / Loss:
                               </span>
                               <div className="text-right">
                                 <div
-                                  className={`font-bold text-2xl ${isProfitable ? "text-green-400" : "text-red-400"}`}
+                                  className={`font-bold text-2xl ${isProfitable ? "text-green-600" : "text-red-600"}`}
                                 >
                                   {isProfitable ? "+" : ""}₹
                                   {Math.abs(pnl).toLocaleString("en-IN", {
@@ -666,7 +669,7 @@ export default function PortfolioPage() {
                                   })}
                                 </div>
                                 <div
-                                  className={`text-sm font-semibold ${isProfitable ? "text-green-300" : "text-red-300"}`}
+                                  className={`text-sm font-semibold ${isProfitable ? "text-green-500" : "text-red-500"}`}
                                 >
                                   {isProfitable ? "+" : ""}
                                   {pnlPct.toFixed(2)}%
@@ -680,27 +683,27 @@ export default function PortfolioPage() {
                   )}
 
                   {/* Lot Details Table */}
-                  <h3 className="text-white font-semibold mb-4">
+                  <h3 className="text-black font-semibold mb-4 text-base">
                     Individual Lots
                   </h3>
                   {historyData.length > 0 ? (
                     <div className="overflow-x-auto">
                       <table className="w-full text-sm">
                         <thead>
-                          <tr className="border-b border-gray-700">
-                            <th className="text-left py-3 px-4 text-gray-400 font-medium">
+                          <tr className="border-b border-black/10">
+                            <th className="text-left py-3 px-4 text-black/40 font-semibold text-xs uppercase tracking-wider">
                               Buy Date
                             </th>
-                            <th className="text-right py-3 px-4 text-gray-400 font-medium">
+                            <th className="text-right py-3 px-4 text-black/40 font-semibold text-xs uppercase tracking-wider">
                               Quantity
                             </th>
-                            <th className="text-right py-3 px-4 text-gray-400 font-medium">
+                            <th className="text-right py-3 px-4 text-black/40 font-semibold text-xs uppercase tracking-wider">
                               Buy Price
                             </th>
-                            <th className="text-right py-3 px-4 text-gray-400 font-medium">
+                            <th className="text-right py-3 px-4 text-black/40 font-semibold text-xs uppercase tracking-wider">
                               Invested
                             </th>
-                            <th className="text-center py-3 px-4 text-gray-400 font-medium">
+                            <th className="text-center py-3 px-4 text-black/40 font-semibold text-xs uppercase tracking-wider">
                               Action
                             </th>
                           </tr>
@@ -709,23 +712,23 @@ export default function PortfolioPage() {
                           {historyData.map((lot) => (
                             <tr
                               key={lot.id}
-                              className="border-b border-gray-700 hover:bg-white/5"
+                              className="border-b border-black/5 hover:bg-black/5 transition-all duration-200"
                             >
-                              <td className="py-3 px-4 text-white">
+                              <td className="py-3 px-4 text-black font-medium">
                                 {new Date(lot.buy_date).toLocaleDateString()}
                               </td>
-                              <td className="text-right py-3 px-4 text-white">
+                              <td className="text-right py-3 px-4 text-black font-medium">
                                 {Number(lot.quantity).toLocaleString("en-IN", {
                                   maximumFractionDigits: 8,
                                 })}
                               </td>
-                              <td className="text-right py-3 px-4 text-white">
+                              <td className="text-right py-3 px-4 text-black font-medium">
                                 ₹
                                 {Number(lot.buy_price).toLocaleString("en-IN", {
                                   maximumFractionDigits: 4,
                                 })}
                               </td>
-                              <td className="text-right py-3 px-4 text-green-400">
+                              <td className="text-right py-3 px-4 text-emerald-600 font-semibold">
                                 ₹
                                 {(
                                   Number(lot.quantity) * Number(lot.buy_price)
@@ -736,7 +739,7 @@ export default function PortfolioPage() {
                               <td className="text-center py-3 px-4">
                                 <button
                                   onClick={() => handleDeleteLot(lot.id)}
-                                  className="text-red-400 hover:text-red-300 text-sm font-medium transition-colors"
+                                  className="text-red-500 hover:text-red-600 text-sm font-semibold transition-colors cursor-pointer"
                                 >
                                   Delete
                                 </button>
@@ -747,7 +750,7 @@ export default function PortfolioPage() {
                       </table>
                     </div>
                   ) : (
-                    <div className="text-center py-6 text-gray-400">
+                    <div className="text-center py-6 text-black/40">
                       No buy history found
                     </div>
                   )}
