@@ -4,7 +4,6 @@ import { useEffect, useState, useCallback } from "react";
 import useUser from "@/lib/authClient";
 import AIDostModal from "../components/AIDostModal";
 import AIReportModal from "../components/AIReportModal";
-import Navbar from "../components/Navbar";
 
 export default function PortfolioPage() {
   const { user, isSignedIn, isLoading } = useUser();
@@ -268,7 +267,6 @@ export default function PortfolioPage() {
   if (!isSignedIn && !isLoading) {
     return (
       <div className="min-h-screen py-12 px-4 bg-linear-to-b from-[#050511] via-[#0d1020] to-[#0b0b12]">
-        <Navbar />
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-3xl font-bold text-white mb-4">Please Sign In</h1>
           <p className="text-gray-400">
@@ -281,7 +279,6 @@ export default function PortfolioPage() {
 
   return (
     <div className="min-h-screen py-12 px-4 bg-linear-to-b from-[#050511] via-[#0d1020] to-[#0b0b12]">
-      <Navbar /> {/* <-- Added Navbar here */}
       <div className="max-w-6xl mx-auto mt-12 px-6">
         <div className="mb-8">
           <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">

@@ -20,7 +20,6 @@ import {
 import AIDostModal from "../../components/AIDostModal";
 import AIReportModal from "../../components/AIReportModal";
 import Chatbot from "../../components/Chatbot";
-import Navbar from "../../components/Navbar";
 
 // Utility functions
 function formatPct(val) {
@@ -394,7 +393,6 @@ export default function MFDetailsPage() {
 
   return (
     <>
-      <Navbar />
       <section className="min-h-screen pt-28 pb-16 px-4 md:px-8 bg-gradient-to-b from-[#050511] via-[#0d1020] to-[#0b0b12] text-white">
         <div className="max-w-7xl mx-auto grid gap-8">
           {loading ? (

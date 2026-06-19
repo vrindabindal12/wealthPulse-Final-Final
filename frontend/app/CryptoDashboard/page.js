@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-import Navbar from "../components/Navbar";
 import Chatbot from "../components/Chatbot";
 
 // Debounce utility
@@ -57,7 +56,6 @@ export default function CryptoDashboardPage() {
 
   return (
     <>
-    <Navbar />
     <section className="relative min-h-screen bg-gradient-to-b from-[#050511] via-[#0d1020] to-[#0b0b12] py-16 text-white">
       <div className="max-w-6xl mx-auto px-6 py-10 relative z-10">
         

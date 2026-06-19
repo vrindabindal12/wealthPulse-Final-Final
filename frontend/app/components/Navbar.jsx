@@ -43,7 +43,14 @@ function MagneticButton({ children, href, className, onClick }) {
 
 export const Navbar = () => {
   const pathname = usePathname();
-  const isDarkPage = pathname ? pathname !== "/" : false;
+  const lowerPath = pathname ? pathname.toLowerCase() : "";
+
+  // Do not render Navbar on sign-in and sign-up pages
+  if (lowerPath.startsWith("/sign-in") || lowerPath.startsWith("/sign-up")) {
+    return null;
+  }
+
+  const isDarkPage = lowerPath && lowerPath !== "/" && lowerPath !== "/stockdashboard" && lowerPath !== "/stockdashboard/";
 
   const { isSignedIn, user, isLoading, signOut } = useUser();
   const [menuOpen, setMenuOpen] = useState(false);
