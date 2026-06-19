@@ -1,4 +1,4 @@
-# WealthPulse API Entry Point
+# WealthPulse API Entry Point - reload trigger 1
 import asyncio
 import os
 from fastapi import FastAPI, Request
