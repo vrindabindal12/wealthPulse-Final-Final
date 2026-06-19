@@ -1,221 +1,271 @@
-
-
 # WealthPulse
 
-WealthPulse is an AI-powered portfolio cockpit for Indian retail investors. Track stocks, mutual funds, and crypto in one place, see real risk/return analytics, and get conversational guidance from AI Dost and AI Report. 
+WealthPulse is an AI-powered portfolio cockpit for retail investors. Track stocks, mutual funds, and crypto in one place, see real risk/return analytics, and get conversational guidance from your AI companions.
 
 ---
 
-## What you can do
+## 🌟 Key Features
 
-* **Track everything in one dashboard**
+* **Consolidated Portfolio Tracker**
+  - Add stocks, mutual funds, and crypto with buy price, quantity, and buy date.
+  - View aggregated holding positions (average buy price, total quantities, current values) instead of scattered lots.
+  - Check transaction buy history with lot details in a dedicated breakdown modal.
+  - Interactive per-holding and overall P&L, XIRR, and transaction timelines.
 
-  * Add stocks, mutual funds, and crypto with buy price, quantity, and buy date.
-  * See aggregated positions (average buy price, total quantity) instead of scattered lots.
-  * View per-holding and overall P&L, XIRR, and timeline charts.
+* **Premium Light Theme Design**
+  - Modern, clean user interface styled around the signature `#F5F5F5` light gray background and high-contrast dark typography.
+  - Dynamic elements featuring card containers (`bg-white`) with fine borders (`border-black/5`) and micro-animations on hover.
+  - Global, responsive navigation bar (`Navbar.jsx`) that dynamically updates typography weights and colors depending on light/dark modes of active routes.
 
-* **See real market behaviour**
+* **Real Market Behaviour & Integrations**
+  - Live price feeds via:
+    - **Binance WebSocket** (Crypto → Redis).
+    - **Finnhub WebSocket** (US Stocks → Redis).
+    - **yfinance polling** (Indian Stocks → Redis).
+  - Mutual Fund NAVs parsed directly from AMFI text documents and cached for swift retrieval.
+  - Daily historical price series backfill to enable detailed analytics.
 
-  * Live prices via:
+* **Portfolio Risk & Performance Metrics**
+  - Annualized volatility, Sharpe ratios (using a 5% risk-free rate), and maximum drawdown calculations.
+  - 1-Year Monte Carlo simulations for each holding (simulated expected NAV/price, upper/lower bounds, and positive return probabilities).
+  - Daily portfolio snapshot logs to chart historical net asset value (NAV) over time.
 
-    * Binance WebSocket (crypto → Redis).
-    * Finnhub WebSocket (US stocks → Redis).
-    * yfinance polling (Indian stocks → Redis).
-  * MF NAVs parsed directly from the AMFI NAV text file and stored in `price_history`.
-
-* **Understand risk, not just returns**
-
-  * Volatility, Sharpe ratio, and max drawdown per asset using daily price history.
-  * 1-year Monte Carlo simulation for each holding, cached in Redis for fast access.
-  * Daily portfolio snapshots so you can see how total value evolved over time.
-
-* **Talk to your portfolio**
-
-  * **AI Dost**: friendly assistant that explains your portfolio in simple language and suggests next steps.
-  * **AI Report**: professional-style report with allocation, risk assessment, and performance by asset.
-  * Both use Groq (Llama-3.3-70B) with automatic Gemini fallback.
-
----
-
-## How pricing & history work (in short)
-
-* **Live data:**
-  Workers connect to live sources and push prices into Redis:
-
-  * Crypto → Binance WebSocket.
-  * US stocks → Finnhub WebSocket.
-  * Indian stocks → periodic yfinance polling.
-  * Mutual funds → NAVs parsed from AMFI and cached.
-
-* **Why backfill “old” data?**
-  Advanced metrics (volatility, Sharpe, drawdown, Monte Carlo) and charts need a *price series*, not just today’s price. So when a symbol appears in your holdings, backfill jobs fetch ~months of historical prices into `price_history`. That allows:
-
-  * Realistic volatility and Sharpe (instead of always 0).
-  * Max drawdown over time.
-  * Monte Carlo simulations based on actual past behaviour, not guesses.
-
-* **Combining it all:**
-  When you open the portfolio:
-
-  * Analytics layer reads your holdings and groups all buys of the same symbol.
-  * It uses Redis for current prices and `price_history` for daily history.
-  * It computes P&L, XIRR (from all buy dates to today), risk metrics, and Monte Carlo outputs.
-  * AI endpoints read that analytics summary and generate human-readable explanations.
+* **AI Assistants**
+  - **AI Dost**: A friendly, responsive chatbot that offers portfolio analysis and suggestions in simple language. Includes suggestions chips and smooth auto-scrolling interfaces.
+  - **AI Report**: A structured, detailed investment analysis report containing asset allocations, risk ratings, and growth projections.
+  - Support for streaming LLM outputs powered by Groq (Llama-3.3-70B) with automatic Google Gemini fallbacks.
 
 ---
 
-## API overview (backend)
+## 🏗️ System Architecture & Data Flow
 
-Base URL (local): `http://localhost:8000`
+WealthPulse is built on a high-throughput, decoupled architecture consisting of an asynchronous API backend, a real-time cache layer, dynamic data ingest workers, and a modern single-page frontend.
 
-### Portfolio
+```mermaid
+graph TD
+    %% Frontend and Auth
+    User([User Browser]) -->|Next.js App Router| FE[Next.js Frontend]
+    FE -->|Auth Session| Clerk[Clerk Auth Platform]
+    
+    %% API and Cache
+    FE -->|API Requests + JWT| BE[FastAPI Backend]
+    BE -->|Read/Write Session Cache| Redis[(Redis In-Memory Cache)]
+    BE -->|Async DB Queries| Postgres[(PostgreSQL DB)]
+    BE -->|LLM Prompts| LLM[Groq / Gemini API]
 
-* `GET /api/portfolio`
-  List all holdings for the current user.
+    %% Live Ingest Workers
+    BinanceWS[Binance WS Worker] -->|Live Crypto Prices| Redis
+    FinnhubWS[Finnhub WS Worker] -->|Live US Stock Prices| Redis
+    YFWorker[yfinance Polling Worker] -->|Live India Stock Prices| Redis
+    AMFICron[AMFI NAV Cron Job] -->|Daily NAV Backfill| Postgres
+    AMFICron -->|Latest NAV Cache| Redis
+```
 
-* `POST /api/portfolio`
-  Add a holding (symbol, name, assettype, buyprice, quantity, buydate).
+### Components
 
-* `DELETE /api/portfolio/holding/{id}`
-  Remove a specific lot.
-
-* `GET /api/portfolio/history/{symbol}`
-  Full buy history (all lots) for a symbol for the current user.
-
-### Analytics
-
-* `GET /api/analytics/portfolio`
-  Aggregated portfolio analytics:
-
-  * Summary (invested, current value, total P&L, P&L %).
-  * Holdings (one per symbol) with P&L, XIRR, risk metrics, Monte Carlo.
-
-* `GET /api/analytics/history`
-  Portfolio value over time from daily snapshots.
-
-### Market data
-
-* `GET /api/market/mutualfunds?q=…` – MF search.
-* `GET /api/market/mutualfunds/{schemecode}` – MF NAV history.
-* `GET /api/market/stocks/india?symbol=…` – Indian stock price (cached).
-* `GET /api/market/stocks/us?symbol=…` – US stock price (cached).
-* `GET /api/market/crypto?symbol=…` – Crypto price (cached).
-
-### Streaming
-
-* `GET /api/stream/prices`
-  Server-Sent Events stream of live prices from Redis.
-
-### AI
-
-* `GET /api/ai/dost`
-  Friendly AI overview of your portfolio.
-
-* `GET /api/ai/report`
-  Structured AI report (`{ text, format: "markdown" }`).
-
-All protected endpoints expect an Auth0 access token in the `Authorization: Bearer` header.
+1. **Frontend (Next.js)**: Built using React, Tailwind CSS, and GSAP for micro-animations. Connects to Clerk for client-side authentication and queries the backend for portfolio metrics, charts, and AI completions.
+2. **Backend (FastAPI)**: Formulates an asynchronous python API layer using SQLAlchemy and `asyncpg`. Integrates Clerk JWT verification middleware to secure portfolio data.
+3. **Database (PostgreSQL)**: Acts as the persistent storage layer for transactions, user profiles, historical prices, and daily snapshots.
+4. **Cache & Streaming (Redis)**: Acts as a real-time key-value cache and a message broker. Feeds client price streams via Server-Sent Events (SSE).
+5. **Background Ingestion Workers**:
+   - `binance_ws.py`: Subscribes to Binance stream to push live crypto prices into Redis.
+   - `finnhub_ws.py`: Streams live US equity ticks from Finnhub directly into Redis.
+   - `india_stocks.py`: Periodically queries Indian equities via `yfinance` to cache prices.
+   - `amfi_cron.py`: Scheduled task that parses official daily NAV lists from the Association of Mutual Funds in India (AMFI) to populate `price_history` and cache Navs.
 
 ---
 
-## Environment configuration
+## 🗄️ Database Schema Design
+
+The Postgres database tables are defined using SQLAlchemy declarative models:
+
+### 1. `users` Table
+Stores user credentials linked to Clerk authentication.
+* `id` (`Text`, Primary Key) - The user's unique Clerk subject ID (`sub`).
+* `email` (`Text`, Unique, Not Null) - User email address.
+* `created_at` (`TIMESTAMP with Timezone`) - User creation timestamp.
+
+### 2. `holdings` Table
+Tracks individual asset buy transactions (lots) for each portfolio.
+* `id` (`UUID`, Primary Key) - Auto-generated unique lot transaction ID.
+* `user_id` (`Text`, Not Null) - Owner identification tag matching the user ID.
+* `symbol` (`Text`, Not Null) - Market ticker symbol (e.g., `RELIANCE.NS`, `BTCUSDT`, or AMFI scheme code `120503`).
+* `name` (`Text`, Not Null) - Asset or security name.
+* `asset_type` (`Text`, Not Null) - Categorization tag: `stock`, `mutual_fund`, or `crypto`.
+* `buy_price` (`Numeric(18, 6)`, Not Null) - Price per unit at purchase.
+* `quantity` (`Numeric(18, 6)`, Not Null) - Total units purchased.
+* `buy_date` (`Date`, Not Null) - Date of the trade.
+* `created_at` (`TIMESTAMP with Timezone`) - Auto-generated creation time.
+
+### 3. `price_history` Table
+Stores daily close prices for calculating advanced metrics (Sharpe ratio, volatility, maximum drawdown, Monte Carlo simulations).
+* `symbol` (`Text`, Composite Primary Key) - Ticker symbol.
+* `price_date` (`Date`, Composite Primary Key) - The trading date.
+* `asset_type` (`Text`, Not Null) - Type of asset.
+* `close_price` (`Numeric(18, 6)`, Not Null) - Adjusted closing price on the date.
+
+### 4. `portfolio_snapshots` Table
+Logs daily aggregate metrics of a user's portfolio over time to draw historical NAV charts.
+* `id` (`UUID`, Primary Key) - Unique snapshot record ID.
+* `user_id` (`Text`, Not Null) - Associated user ID.
+* `snapshot_date` (`Date`, Not Null) - Captured date.
+* `total_value` (`Numeric(18, 2)`) - Combined asset evaluation.
+* `total_cost` (`Numeric(18, 2)`) - Net cost basis of portfolio.
+* `breakdown` (`JSONB`) - Structured asset-level details on that specific date.
+* *Constraint*: Unique index on `(user_id, snapshot_date)`.
+
+---
+
+## ⚡ Redis & Caching Strategy
+
+Redis is utilized as a real-time data layer and performance optimization layer to minimize database load and external API query limits:
+
+### 1. Real-Time Price Caching
+Inbound live workers write prices to key structures in Redis:
+- **Crypto**: `crypto:{symbol}` (TTL: None, updated via WebSocket tick).
+- **US Stocks**: `stock:us:{symbol}` (TTL: None, updated via WebSocket tick).
+- **Indian Stocks**: `stock:in:{symbol}` (TTL: None, updated via polling).
+- **Mutual Funds**: `nav:{scheme_code}` (TTL: None, updated daily by AMFI script).
+
+When users fetch their dashboards, current prices are retrieved in O(1) time directly from Redis, bypassing database or network lookups.
+
+### 2. Live SSE Price Streaming
+The endpoint `/api/stream/prices` sets up a Server-Sent Events (SSE) stream. It reads real-time price messages from Redis and streams live valuation updates directly to the frontend interface.
+
+### 3. Analytics & Simulation Caching
+Advanced calculations are cached in Redis to keep page load times fast:
+- **Monte Carlo Simulations**: Pre-calculated forecasts are cached at `mc:{user_id}:{symbol}` (TTL: 6 hours).
+- **Mutual Fund Scheme Lists**: Searches are cached at `mf:search:{query}` (TTL: 1 hour) and metadata at `mf:meta:{scheme_code}` (TTL: 1 hour).
+- **NAV Historical Series**: Re-calculating NAV charts reads cached structures at `mf:series:{scheme_code}` (TTL: 30 minutes).
+
+---
+
+## 🔐 Authentication Architecture
+
+WealthPulse uses **Clerk** for modern, secure identity management.
+* **Frontend**: Wrapped globally at the layout level (`layout.js`) to secure client-side pages.
+* **Backend**: FastAPI middleware validates session tokens supplied in the HTTP request headers (`Authorization: Bearer <token>`).
+
+---
+
+## 🛠️ Environment Configuration
 
 ### Backend `.env`
 
+Copy `.env.example` to `.env` and fill in:
+
 ```bash
-# ── Copy this file to .env and fill in the real values ───────────────
+# ── PostgreSQL Database Connection ───────────────────────────────
+DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/wealthpulse
+DATABASE_URL_SYNC=postgresql://postgres:password@localhost:5432/wealthpulse
 
-# PostgreSQL connection (asyncpg driver)
-DATABASE_URL=postgresql+asyncpg://USER:PASSWORD@HOST:PORT/DATABASE?sslmode=require
+# ── Cache Layer ──────────────────────────────────────────────────
+REDIS_URL=redis://localhost:6379/0
 
-# Redis
-REDIS_URL=redis://localhost:6379
+# ── Clerk Configuration ──────────────────────────────────────────
+CLERK_API_URL=https://your-clerk-instance-id.accounts.dev
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+CLERK_SECRET_KEY=sk_test_...
 
-# Auth0 (from Auth0 Dashboard → Applications → your app)
-AUTH0_DOMAIN=dev-qt0cqogfgwebky55.us.auth0.com
-AUTH0_AUDIENCE=YOUR_AUTH0_CLIENT_ID   # must match the `aud` claim in the access token
+# ── Large Language Models & APIs ─────────────────────────────────
+GROQ_API_KEY=your_groq_api_key
+GEMINI_API_KEY=your_gemini_api_key
+FINNHUB_API_KEY=your_finnhub_api_key
 
-# External APIs
-GROQ_API_KEY=your_groq_key
-GEMINI_API_KEY=your_gemini_key
-FINNHUB_API_KEY=your_finnhub_key
-
-# CORS — set this to your real Vercel deployment URL
-FRONTEND_URL=https://wealthpulse.vercel.app
+# ── CORS Settings ────────────────────────────────────────────────
+FRONTEND_URL=http://localhost:3000
 ```
 
-### Frontend `.env.local`
+### Frontend `.env`
+
+Create `.env` inside the `frontend` folder and fill in:
 
 ```bash
-# Auth0 Configuration for Next.js
-AUTH0_SECRET=your_secret_key_here
-AUTH0_BASE_URL=http://localhost:3000
-AUTH0_ISSUER_BASE_URL=https://your-auth0-domain.us.auth0.com
-AUTH0_CLIENT_ID=your_client_id_here
-AUTH0_CLIENT_SECRET=your_client_secret_here
+# ── Clerk Authentication Configuration ──────────────────────────
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+CLERK_SECRET_KEY=sk_test_...
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 
-# API Keys (for frontend AI routes, if used)
-GROQ_API_KEY=your_groq_api_key_here
-GEMINI_API_KEY=your_gemini_api_key_here
-
-# Backend URL
+# ── API Keys & Backends ──────────────────────────────────────────
+GROQ_API_KEY=your_groq_api_key
+GEMINI_API_KEY=your_gemini_api_key
 NEXT_PUBLIC_API_URL=http://localhost:8000
 ```
 
 ---
 
-## Getting started
+## 🚀 Getting Started
 
-### 1. Clone the repo
+### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-user/wealthpulse.git
-cd wealthpulse
+git clone https://github.com/vrindabindal12/wealthPulse-Final-Final.git
+cd wealthpulse-v2
 ```
 
-### 2. Backend (FastAPI)
+### 2. Backend (FastAPI) Setup
 
 ```bash
 cd backend
 
-# Create virtualenv
+# Create and activate a python virtual environment
 python -m venv venv
-# Activate (Windows)
+# On Windows:
 source venv/Scripts/activate
-# or on Unix/macOS: source venv/bin/activate
+# On macOS/Linux:
+source venv/bin/activate
 
-# Install dependencies
+# Install package dependencies
 pip install -r requirements.txt
 
-# Configure env
+# Configure your environment
 cp .env.example .env
-# edit .env with your DB, Redis, Auth0, and API keys
+# Edit .env with your PostgreSQL, Redis, Clerk, and LLM credentials
 
-# Apply migrations (if needed)
+# Run database migrations
 alembic upgrade head
 
-# Run backend
+# Start the uvicorn development server
 uvicorn main:app --reload
 ```
+The backend server will run on `http://localhost:8000`.
 
-Backend will run on `http://localhost:8000`.
-
-### 3. Frontend (Next.js)
+### 3. Frontend (Next.js) Setup
 
 ```bash
-cd frontend
+cd ../frontend
 
-# Install deps
+# Install dependencies
 npm install
 
-# Create env
-cp .env.local.example .env.local   # if you add an example file
-# or just create .env.local and fill the values above
-
-# Run dev server
+# Start the next development server
 npm run dev
 ```
-
-Frontend will run on `http://localhost:3000` and proxy API calls to the backend (via `NEXT_PUBLIC_API_URL` and Next.js rewrites).
+The frontend will run on `http://localhost:3000`. Hot module replacement (HMR) is active.
 
 ---
+
+## 🗺️ API Endpoints Summary
+
+### Portfolio Management
+* `GET /api/portfolio` - Fetch holdings list.
+* `POST /api/portfolio` - Add asset lot (symbol, quantity, buy price, asset type, buy date).
+* `DELETE /api/portfolio/holding/{id}` - Delete asset lot or holding.
+* `GET /api/portfolio/history/{symbol}` - Retrieve full transaction history for a specific symbol.
+
+### Financial Analytics
+* `GET /api/analytics/portfolio` - Aggregated portfolio metrics (risk analysis, Monte Carlo, combined values, performance summaries).
+* `GET /api/analytics/history` - Historical portfolio NAV snapshots over time.
+
+### Market Data APIs
+* `GET /api/market/mutualfunds` - Search Indian Mutual Funds database.
+* `GET /api/market/mutualfunds/{schemecode}` - Fetch fund details & price history.
+* `GET /api/market/stocks/india` - Indian stock price query.
+* `GET /api/market/stocks/us` - US stock price query.
+* `GET /api/market/crypto` - Cryptocurrency price query.
+* `GET /api/stream/prices` - Server-Sent Events (SSE) price stream.
+
+### AI Endpoints
+* `GET /api/ai/dost` - Conversational portfolio review.
+* `GET /api/ai/report` - Generate detailed Markdown research reports.
