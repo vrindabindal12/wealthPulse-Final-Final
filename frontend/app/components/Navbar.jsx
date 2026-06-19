@@ -50,8 +50,9 @@ export const Navbar = () => {
     return null;
   }
 
-  const lightPages = ["/", "/stockdashboard", "/stockdashboard/", "/courses", "/courses/", "/cryptodashboard", "/cryptodashboard/", "/mfdashboard", "/mfdashboard/", "/portfolio", "/portfolio/"];
-  const isDarkPage = lowerPath && !lightPages.includes(lowerPath);
+  const lightPagePrefixes = ["/stockdashboard", "/courses", "/cryptodashboard", "/mfdashboard", "/portfolio"];
+  const isLightPage = lowerPath === "/" || lightPagePrefixes.some(prefix => lowerPath.startsWith(prefix));
+  const isDarkPage = !isLightPage;
 
   const { isSignedIn, user, isLoading, signOut } = useUser();
   const [menuOpen, setMenuOpen] = useState(false);
