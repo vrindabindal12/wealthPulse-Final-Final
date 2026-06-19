@@ -165,19 +165,19 @@ export default function MFDetailsPage() {
 
     Promise.all([
       fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/mutual/scheme-details/${schemeCode}`,
+        `/api/backend/mutual/scheme-details/${schemeCode}`,
       ).then((r) => handleResponse(r, "scheme-details")),
       fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/mutual/historical-nav/${schemeCode}`,
+        `/api/backend/mutual/historical-nav/${schemeCode}`,
       ).then((r) => handleResponse(r, "historical-nav")),
       fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/mutual/performance-heatmap/${schemeCode}`,
+        `/api/backend/mutual/performance-heatmap/${schemeCode}`,
       ).then((r) => handleResponse(r, "performance-heatmap")),
       fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/mutual/risk-volatility/${schemeCode}`,
+        `/api/backend/mutual/risk-volatility/${schemeCode}`,
       ).then((r) => handleResponse(r, "risk-volatility")),
       fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/mutual/monte-carlo-prediction/${schemeCode}`,
+        `/api/backend/mutual/monte-carlo-prediction/${schemeCode}`,
       ).then((r) => handleResponse(r, "monte-carlo-prediction")),
     ])
       .then(([meta, navs, heat, risk, mc]) => {
@@ -211,7 +211,7 @@ export default function MFDetailsPage() {
     const timeoutId = setTimeout(async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/mutual/schemes?search=${encodeURIComponent(fund1Query)}`,
+          `/api/backend/mutual/schemes?search=${encodeURIComponent(fund1Query)}`,
         );
         const data = await response.json();
         const suggestions = Object.entries(data)
@@ -240,7 +240,7 @@ export default function MFDetailsPage() {
     const timeoutId = setTimeout(async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/mutual/schemes?search=${encodeURIComponent(fund2Query)}`,
+          `/api/backend/mutual/schemes?search=${encodeURIComponent(fund2Query)}`,
         );
         const data = await response.json();
         const suggestions = Object.entries(data)
@@ -264,7 +264,7 @@ export default function MFDetailsPage() {
     (async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/mutual/scheme-details/${selectedFund1.code}`,
+          `/api/backend/mutual/scheme-details/${selectedFund1.code}`,
         );
         const data = await res.json();
         setFund1Data({ meta: data });
@@ -280,7 +280,7 @@ export default function MFDetailsPage() {
     (async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/mutual/scheme-details/${selectedFund2.code}`,
+          `/api/backend/mutual/scheme-details/${selectedFund2.code}`,
         );
         const data = await res.json();
         setFund2Data({ meta: data });
@@ -393,66 +393,38 @@ export default function MFDetailsPage() {
 
   return (
     <>
-      <section className="min-h-screen pt-28 pb-16 px-4 md:px-8 bg-gradient-to-b from-[#050511] via-[#0d1020] to-[#0b0b12] text-white">
+      <section className="min-h-screen pt-28 pb-16 px-4 md:px-8 bg-[#F5F5F5] text-black">
         <div className="max-w-7xl mx-auto grid gap-8">
           {loading ? (
             <div className="flex justify-center items-center min-h-[60vh]">
-              <span className="animate-spin border-4 border-purple-400 border-t-transparent rounded-full w-10 h-10"></span>
+              <span className="animate-spin border-4 border-black border-t-transparent rounded-full w-10 h-10"></span>
             </div>
           ) : (
             <>
               {/* Scheme Name Heading */}
-              <div className="mb-6 py-8">
-                <h1 className="text-3xl md:text-4xl font-bold text-cyan-400 text-center">
-                  Mutual Fund Dashboard
+              <div className="mb-6">
+                <h1 className="text-4xl md:text-5xl font-medium text-black text-center tracking-tight" style={{ letterSpacing: '-0.03em' }}>
+                  Mutual Fund Analytics.
                 </h1>
               </div>
 
               {/* Fund Name Display */}
               <div className="mb-6">
-                <div className="bg-[#181f31] rounded-xl p-4 border border-gray-700">
-                  <h2 className="text-xl font-bold text-white text-center mb-4">
+                <div className="bg-white border border-black/5 rounded-[1.5rem] p-6 shadow-xs max-w-xl mx-auto">
+                  <h2 className="text-2xl font-bold text-black text-center mb-4 tracking-tight">
                     {meta?.scheme_name || `Scheme Code: ${schemeCode}`}
                   </h2>
-
-                  {/* AI Buttons */}
                   <div className="flex gap-4 justify-center">
                     <button
                       onClick={() => setShowAIDost(true)}
-                      className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white px-6 py-2.5 rounded-lg font-semibold text-base transition-all transform hover:scale-105 shadow-lg flex items-center gap-2"
+                      className="bg-black hover:bg-gray-800 text-white px-6 py-2.5 rounded-full font-semibold transition-all transform hover:scale-[1.02] shadow-xs cursor-pointer flex items-center gap-2 text-sm"
                     >
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-                        />
-                      </svg>
                       AI Dost
                     </button>
                     <button
                       onClick={() => setShowAIReport(true)}
-                      className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-2.5 rounded-lg font-semibold text-base transition-all transform hover:scale-105 shadow-lg flex items-center gap-2"
+                      className="bg-black/5 hover:bg-black/10 text-black px-6 py-2.5 rounded-full font-semibold transition-all flex items-center gap-2 text-sm cursor-pointer border border-black/10"
                     >
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                        />
-                      </svg>
                       AI Report
                     </button>
                   </div>
@@ -464,56 +436,56 @@ export default function MFDetailsPage() {
                 {/* LEFT COLUMN */}
                 <div className="flex flex-col gap-6">
                   {/* Fund Meta Card */}
-                  <div className="bg-[#181f31] rounded-xl p-6 shadow-lg h-fit">
-                    <h3 className="text-xl font-bold mb-4 text-white border-b border-gray-700 pb-2">
+                  <div className="bg-white border border-black/5 rounded-[1.5rem] p-6 shadow-xs h-fit">
+                    <h3 className="text-xl font-bold mb-4 text-black border-b border-black/5 pb-2">
                       {meta?.scheme_name || `Fund Details`}
                     </h3>
                     <div className="space-y-3">
                       <div className="flex justify-between items-center text-base">
-                        <span className="font-medium text-gray-300">
+                        <span className="font-semibold text-black/45">
                           fund house:
                         </span>
-                        <span className="text-white font-semibold">
+                        <span className="text-black font-semibold">
                           {meta?.fund_house || "Not Available"}
                         </span>
                       </div>
                       <div className="flex justify-between items-center text-base">
-                        <span className="font-medium text-gray-300">
+                        <span className="font-semibold text-black/45">
                           scheme type:
                         </span>
-                        <span className="text-white font-semibold">
+                        <span className="text-black font-semibold">
                           {meta?.scheme_type || "Not Available"}
                         </span>
                       </div>
                       <div className="flex justify-between items-center text-base">
-                        <span className="font-medium text-gray-300">
+                        <span className="font-semibold text-black/45">
                           scheme category:
                         </span>
-                        <span className="text-white font-semibold">
+                        <span className="text-black font-semibold">
                           {meta?.scheme_category || "Not Available"}
                         </span>
                       </div>
                       <div className="flex justify-between items-center text-base">
-                        <span className="font-medium text-gray-300">
+                        <span className="font-semibold text-black/45">
                           scheme code:
                         </span>
-                        <span className="text-white font-semibold">
+                        <span className="text-black font-semibold">
                           {schemeCode}
                         </span>
                       </div>
                       <div className="flex justify-between items-center text-base">
-                        <span className="font-medium text-gray-300">
+                        <span className="font-semibold text-black/45">
                           scheme name:
                         </span>
-                        <span className="text-white font-semibold text-right">
+                        <span className="text-black font-semibold text-right">
                           {meta?.scheme_name || "Not Available"}
                         </span>
                       </div>
                     </div>
-                    <div className="space-y-4 mt-6 border-t border-gray-700 pt-4">
+                    <div className="space-y-4 mt-6 border-t border-black/5 pt-4">
                       <div>
                         <label className="block text-base mb-2">
-                          <span className="text-gray-300 font-medium">
+                          <span className="text-black/60 font-semibold">
                             Buy Price / NAV (₹):
                           </span>
                         </label>
@@ -528,12 +500,12 @@ export default function MFDetailsPage() {
                           }
                           value={buyPrice}
                           onChange={(e) => setBuyPrice(e.target.value)}
-                          className="w-full bg-[#232b44] text-white rounded-lg p-3 text-base focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          className="w-full bg-black/5 border border-black/5 text-black rounded-xl p-3 text-base focus:outline-none focus:ring-2 focus:ring-purple-500/20"
                         />
                       </div>
                       <div>
                         <label className="block text-base mb-2">
-                          <span className="text-gray-300 font-medium">
+                          <span className="text-black/60 font-semibold">
                             Units/Quantity:
                           </span>
                         </label>
@@ -545,12 +517,12 @@ export default function MFDetailsPage() {
                           onChange={(e) =>
                             setQuantity(parseFloat(e.target.value) || 0)
                           }
-                          className="w-full bg-[#232b44] text-white rounded-lg p-3 text-base focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          className="w-full bg-black/5 border border-black/5 text-black rounded-xl p-3 text-base focus:outline-none focus:ring-2 focus:ring-purple-500/20"
                         />
                       </div>
                       <div>
                         <label className="block text-base mb-2">
-                          <span className="text-gray-300 font-medium">
+                          <span className="text-black/60 font-semibold">
                             Buy Date:
                           </span>
                         </label>
@@ -560,14 +532,14 @@ export default function MFDetailsPage() {
                             buyDate || new Date().toISOString().split("T")[0]
                           }
                           onChange={(e) => setBuyDate(e.target.value)}
-                          className="w-full bg-[#232b44] text-white rounded-lg p-3 text-base focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          className="w-full bg-black/5 border border-black/5 text-black rounded-xl p-3 text-base focus:outline-none focus:ring-2 focus:ring-purple-500/20"
                         />
                       </div>
                     </div>
                     <button
                       onClick={handleAddToPortfolio}
                       disabled={addingToPortfolio}
-                      className={`w-full bg-green-600 hover:bg-green-700 text-white px-6 py-3 text-base font-semibold mt-6 rounded-lg transition-colors ${
+                      className={`w-full bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3.5 text-base font-bold mt-6 rounded-full transition-all shadow-xs cursor-pointer ${
                         addingToPortfolio ? "opacity-50 cursor-not-allowed" : ""
                       }`}
                     >
@@ -576,19 +548,19 @@ export default function MFDetailsPage() {
                   </div>
 
                   {/* Return Calculator Card */}
-                  <div className="bg-[#181f31] rounded-xl p-6 shadow-lg h-fit">
-                    <h3 className="text-xl font-bold mb-4 text-white border-b border-gray-700 pb-2">
+                  <div className="bg-white border border-black/5 rounded-[1.5rem] p-6 shadow-xs h-fit">
+                    <h3 className="text-xl font-bold mb-4 text-black border-b border-black/5 pb-2">
                       Calculate Your Returns
                     </h3>
                     <div className="space-y-4">
                       <div>
                         <label className="block text-base mb-2">
-                          <span className="text-gray-300 font-medium">
+                          <span className="text-black/60 font-semibold">
                             Investment Amount (₹):
                           </span>
                         </label>
                         <input
-                          className="w-full bg-[#232b44] text-white rounded-lg p-3 text-base focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          className="w-full bg-black/5 border border-black/5 text-black rounded-xl p-3 text-base focus:outline-none focus:ring-2 focus:ring-purple-500/20"
                           type="number"
                           min="100"
                           value={amount}
@@ -597,12 +569,12 @@ export default function MFDetailsPage() {
                       </div>
                       <div>
                         <label className="block text-base mb-2">
-                          <span className="text-gray-300 font-medium">
+                          <span className="text-black/60 font-semibold">
                             Duration (Years):
                           </span>
                         </label>
                         <input
-                          className="w-full bg-[#232b44] text-white rounded-lg p-3 text-base focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          className="w-full bg-black/5 border border-black/5 text-black rounded-xl p-3 text-base focus:outline-none focus:ring-2 focus:ring-purple-500/20"
                           type="number"
                           min="1"
                           value={years}
@@ -610,32 +582,32 @@ export default function MFDetailsPage() {
                         />
                       </div>
                     </div>
-                    <div className="mt-6 space-y-3 text-base border-t border-gray-700 pt-4">
+                    <div className="mt-6 space-y-3 text-base border-t border-black/5 pt-4">
                       <div className="flex justify-between items-center">
-                        <span className="text-gray-300 font-medium">
+                        <span className="text-black/45 font-semibold">
                           Estimated Total Value:
                         </span>
-                        <span className="font-bold text-white text-lg">
+                        <span className="font-bold text-black text-lg">
                           {formatRs(estReturn)}
                         </span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-gray-300 font-medium">
+                        <span className="text-black/45 font-semibold">
                           Estimated Profit:
                         </span>
-                        <span className="font-bold text-green-400 text-lg">
+                        <span className="font-bold text-emerald-600 text-lg">
                           {formatRs(estProfit)}
                         </span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-gray-300 font-medium">
+                        <span className="text-black/45 font-semibold">
                           Annualized Return:
                         </span>
-                        <span className="font-bold text-white text-lg">
+                        <span className="font-bold text-black text-lg">
                           {formatPct(riskVolatility.annualized_return)}
                         </span>
                       </div>
-                      <p className="text-sm opacity-70 mt-4 text-gray-400 italic">
+                      <p className="text-sm mt-4 text-black/40 italic">
                         *Based on historical annualized return, actual returns
                         may vary.
                       </p>
@@ -643,44 +615,44 @@ export default function MFDetailsPage() {
                   </div>
 
                   {/* Risk & Volatility */}
-                  <div className="bg-[#181f31] rounded-xl p-6 shadow-lg h-fit">
-                    <h3 className="text-xl font-bold mb-4 text-white border-b border-gray-700 pb-2">
+                  <div className="bg-white border border-black/5 rounded-[1.5rem] p-6 shadow-xs h-fit">
+                    <h3 className="text-xl font-bold mb-4 text-black border-b border-black/5 pb-2">
                       Risk & Volatility
                     </h3>
                     <div className="space-y-3 mb-4">
                       <div className="flex justify-between items-center text-base">
-                        <span className="text-gray-300 font-medium">
+                        <span className="text-black/45 font-semibold">
                           Annualized Volatility:
                         </span>
-                        <span className="font-bold text-white">
+                        <span className="font-bold text-black">
                           {formatPct(riskVolatility.annualized_volatility)}
                         </span>
                       </div>
                       <div className="flex justify-between items-center text-base">
-                        <span className="text-gray-300 font-medium">
+                        <span className="text-black/45 font-semibold">
                           Annualized Return:
                         </span>
-                        <span className="font-bold text-white">
+                        <span className="font-bold text-black">
                           {formatPct(riskVolatility.annualized_return)}
                         </span>
                       </div>
                       <div className="flex justify-between items-center text-base">
-                        <span className="text-gray-300 font-medium">
+                        <span className="text-black/45 font-semibold">
                           Sharpe Ratio:
                         </span>
-                        <span className="font-bold text-white">
+                        <span className="font-bold text-black">
                           {riskVolatility.sharpe_ratio?.toFixed(2) ?? "--"}
                         </span>
                       </div>
                     </div>
 
-                    <div className="bg-[#232b44] rounded-lg h-64 p-2 mt-4">
+                    <div className="bg-[#F5F5F5] border border-black/5 rounded-2xl h-64 p-2 mt-4">
                       {riskVolatility.returns?.length ? (
                         <ResponsiveContainer width="100%" height="100%">
                           <LineChart data={riskVolatility.returns.slice(-100)}>
                             <CartesianGrid
                               strokeDasharray="3 3"
-                              stroke="#374151"
+                              stroke="#e5e7eb"
                             />
                             <Line
                               type="monotone"
@@ -691,21 +663,21 @@ export default function MFDetailsPage() {
                             />
                             <XAxis
                               dataKey="date"
-                              tick={{ fill: "#9ca3af", fontSize: 9 }}
+                              tick={{ fill: "#6b7280", fontSize: 9 }}
                               angle={-45}
                               textAnchor="end"
                               height={60}
                             />
                             <YAxis
-                              tick={{ fill: "#9ca3af", fontSize: 10 }}
+                              tick={{ fill: "#6b7280", fontSize: 10 }}
                               tickFormatter={(val) =>
                                 (val * 100).toFixed(1) + "%"
                               }
                             />
                             <Tooltip
                               contentStyle={{
-                                background: "#1f2937",
-                                border: "1px solid #374151",
+                                background: "#ffffff",
+                                border: "1px solid #e5e7eb",
                                 borderRadius: "6px",
                               }}
                               formatter={(value) => [
@@ -716,7 +688,7 @@ export default function MFDetailsPage() {
                           </LineChart>
                         </ResponsiveContainer>
                       ) : (
-                        <span className="text-gray-400 text-sm flex items-center justify-center h-full">
+                        <span className="text-black/40 text-sm flex items-center justify-center h-full font-medium">
                           No data
                         </span>
                       )}
@@ -727,9 +699,9 @@ export default function MFDetailsPage() {
                 {/* RIGHT COLUMN */}
                 <div className="flex flex-col gap-6">
                   {/* NAV History Card */}
-                  <div className="bg-[#181f31] rounded-xl p-6 shadow-lg h-fit">
-                    <div className="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
-                      <h3 className="text-xl font-bold text-white">
+                  <div className="bg-white border border-black/5 rounded-[1.5rem] p-6 shadow-xs h-fit">
+                    <div className="flex justify-between items-center mb-4 border-b border-black/5 pb-2">
+                      <h3 className="text-xl font-bold text-black">
                         Historical NAV
                       </h3>
                       <div className="flex gap-2">
@@ -737,18 +709,14 @@ export default function MFDetailsPage() {
                           <button
                             key={period}
                             onClick={() => setSelectedPeriod(period)}
-                            className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${
-                              selectedPeriod === period
-                                ? "bg-purple-600 text-white"
-                                : "bg-[#232b44] text-gray-300 hover:bg-purple-500 hover:text-white"
-                            }`}
+                            className={`px-3.5 py-1.5 text-xs font-bold rounded-full transition-all duration-200 cursor-pointer ${selectedPeriod === period ? "bg-purple-600 text-white shadow-xs" : "bg-black/5 text-black/60 hover:bg-black/10"}`}
                           >
                             {period}
                           </button>
                         ))}
                       </div>
                     </div>
-                    <div className="bg-[#232b44] rounded-lg h-64 p-2">
+                    <div className="bg-[#F5F5F5] border border-black/5 rounded-2xl h-64 p-2">
                       {navHistory.length > 0 ? (
                         <ResponsiveContainer width="100%" height="100%">
                           <LineChart
@@ -764,39 +732,39 @@ export default function MFDetailsPage() {
                           >
                             <CartesianGrid
                               strokeDasharray="3 3"
-                              stroke="#374151"
+                              stroke="#e5e7eb"
                             />
                             <Line
                               type="monotone"
                               dataKey="nav"
-                              stroke="#06b6d4"
+                              stroke="#8b5cf6"
                               strokeWidth={2}
                               dot={false}
                             />
                             <XAxis
                               dataKey="date"
-                              tick={{ fill: "#9ca3af", fontSize: 9 }}
+                              tick={{ fill: "#6b7280", fontSize: 9 }}
                               angle={-45}
                               textAnchor="end"
                               height={60}
                             />
                             <YAxis
                               domain={["auto", "auto"]}
-                              tick={{ fill: "#9ca3af", fontSize: 10 }}
+                              tick={{ fill: "#6b7280", fontSize: 10 }}
                               tickFormatter={(val) => "₹" + val.toFixed(2)}
                             />
                             <Tooltip
                               contentStyle={{
-                                background: "#1f2937",
-                                border: "1px solid #374151",
+                                background: "#ffffff",
+                                border: "1px solid #e5e7eb",
                                 borderRadius: "6px",
                               }}
-                              formatter={(value) => ["₹" + value, "NAV"]}
+                              formatter={(value) => ["₹" + value.toFixed(2), "NAV"]}
                             />
                           </LineChart>
                         </ResponsiveContainer>
                       ) : (
-                        <span className="text-gray-400 text-sm flex items-center justify-center h-full">
+                        <span className="text-black/40 text-sm flex items-center justify-center h-full font-medium">
                           No data
                         </span>
                       )}
@@ -804,8 +772,8 @@ export default function MFDetailsPage() {
                   </div>
 
                   {/* Performance Heatmap */}
-                  <div className="bg-[#181f31] rounded-xl p-6 shadow-lg h-fit">
-                    <h3 className="text-xl font-bold mb-4 text-white border-b border-gray-700 pb-2">
+                  <div className="bg-white border border-black/5 rounded-[1.5rem] p-6 shadow-xs h-fit">
+                    <h3 className="text-xl font-bold mb-4 text-black border-b border-black/5 pb-2">
                       Performance Heatmap
                     </h3>
                     <div className="h-64">
@@ -814,75 +782,75 @@ export default function MFDetailsPage() {
                   </div>
 
                   {/* Monte Carlo Prediction */}
-                  <div className="bg-[#181f31] rounded-xl p-6 shadow-lg h-fit">
-                    <h3 className="text-xl font-bold mb-3 text-white border-b border-gray-700 pb-2">
+                  <div className="bg-white border border-black/5 rounded-[1.5rem] p-6 shadow-xs h-fit">
+                    <h3 className="text-xl font-bold mb-3 text-black border-b border-black/5 pb-2">
                       Monte Carlo Prediction (1 Year)
                     </h3>
                     <div className="space-y-3 mb-4 text-base">
                       <div className="flex justify-between items-center">
-                        <span className="text-gray-300 font-medium">
+                        <span className="text-black/45 font-semibold">
                           Expected NAV:
                         </span>
-                        <span className="font-bold text-white">
+                        <span className="font-bold text-black">
                           {monteCarlo.expected_nav?.toFixed(2) ?? "--"}
                         </span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-gray-300 font-medium">
+                        <span className="text-black/45 font-semibold">
                           Probability of Positive Return:
                         </span>
-                        <span className="font-bold text-white">
+                        <span className="font-bold text-black">
                           {formatPct(
                             monteCarlo.probability_positive_return / 100,
                           )}
                         </span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-gray-300 font-medium">
+                        <span className="text-black/45 font-semibold">
                           Range:
                         </span>
-                        <span className="font-bold text-white">
+                        <span className="font-bold text-black">
                           {monteCarlo.lower_bound_5th_percentile?.toFixed(2)} -{" "}
                           {monteCarlo.upper_bound_95th_percentile?.toFixed(2)}
                         </span>
                       </div>
                     </div>
-                    <div className="bg-[#232b44] rounded-lg h-80 p-2">
+                    <div className="bg-[#F5F5F5] border border-black/5 rounded-2xl h-80 p-2">
                       {monteCarlo.simulation_paths?.length ? (
                         <ResponsiveContainer width="100%" height="100%">
                           <LineChart data={monteCarlo.historical_predicted}>
                             <CartesianGrid
                               strokeDasharray="3 3"
-                              stroke="#374151"
+                              stroke="#e5e7eb"
                             />
                             <XAxis
                               dataKey="day"
-                              tick={{ fill: "#9ca3af", fontSize: 10 }}
+                              tick={{ fill: "#6b7280", fontSize: 10 }}
                               label={{
                                 value: "Trading Days",
                                 position: "insideBottom",
                                 offset: -5,
-                                fill: "#9ca3af",
+                                fill: "#6b7280",
                                 fontSize: 11,
                               }}
                             />
                             <YAxis
-                              tick={{ fill: "#9ca3af", fontSize: 10 }}
+                              tick={{ fill: "#6b7280", fontSize: 10 }}
                               label={{
                                 value: "NAV (₹)",
                                 angle: -90,
                                 position: "insideLeft",
-                                fill: "#9ca3af",
+                                fill: "#6b7280",
                                 fontSize: 11,
                               }}
                             />
                             <Tooltip
                               contentStyle={{
-                                background: "#1f2937",
-                                border: "1px solid #374151",
+                                background: "#ffffff",
+                                border: "1px solid #e5e7eb",
                                 borderRadius: "6px",
                               }}
-                              labelStyle={{ color: "#f3f4f6" }}
+                              labelStyle={{ color: "#000000" }}
                             />
                             <Legend
                               wrapperStyle={{ fontSize: "11px" }}
@@ -925,7 +893,7 @@ export default function MFDetailsPage() {
                           </LineChart>
                         </ResponsiveContainer>
                       ) : (
-                        <span className="text-gray-400 text-sm flex items-center justify-center h-full">
+                        <span className="text-black/40 text-sm flex items-center justify-center h-full font-medium">
                           No data
                         </span>
                       )}
@@ -935,14 +903,14 @@ export default function MFDetailsPage() {
               </div>
 
               {/* Compare Funds Section - Full Width */}
-              <div className="mt-8 bg-[#181f31] rounded-xl p-8 shadow-lg">
-                <h3 className="text-2xl font-bold mb-6 text-white">
+              <div className="mt-8 bg-white border border-black/5 rounded-[1.5rem] p-8 shadow-xs">
+                <h3 className="text-2xl font-bold mb-6 text-black tracking-tight">
                   Compare Funds
                 </h3>
                 <div className="grid md:grid-cols-2 gap-6 mb-6">
                   {/* Fund 1 Search */}
                   <div className="relative">
-                    <label className="block text-base mb-2 text-gray-300 font-medium">
+                    <label className="block text-base mb-2 text-black/60 font-semibold">
                       First Fund
                     </label>
                     <input
@@ -956,20 +924,20 @@ export default function MFDetailsPage() {
                         fund1Query.length >= 1 && setShowFund1Dropdown(true)
                       }
                       placeholder="Type to search (e.g., SBI, HDFC, ICICI)..."
-                      className="w-full bg-[#232b44] text-white p-4 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-gray-400"
+                      className="w-full bg-black/5 border border-black/5 text-black p-4 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-purple-500/20 placeholder-black/40"
                     />
                     {showFund1Dropdown && fund1Suggestions.length > 0 && (
-                      <div className="absolute z-10 w-full mt-2 bg-[#232b44] border border-gray-600 rounded-lg shadow-xl max-h-80 overflow-y-auto">
+                      <div className="absolute z-10 w-full mt-2 bg-white border border-black/10 rounded-xl shadow-xl max-h-80 overflow-y-auto">
                         {fund1Suggestions.map((fund) => (
                           <div
                             key={fund.code}
                             onClick={() => handleFund1Select(fund)}
-                            className="p-4 hover:bg-purple-600 cursor-pointer transition-colors border-b border-gray-700 last:border-b-0"
+                            className="p-4 hover:bg-black/5 cursor-pointer transition-colors border-b border-black/5 last:border-b-0"
                           >
-                            <div className="text-white font-medium text-sm mb-1">
+                            <div className="text-black font-semibold text-sm mb-1">
                               {fund.name}
                             </div>
-                            <div className="text-gray-400 text-xs">
+                            <div className="text-black/45 text-xs">
                               Code: {fund.code}
                             </div>
                           </div>
@@ -977,23 +945,23 @@ export default function MFDetailsPage() {
                       </div>
                     )}
                     {selectedFund1 && (
-                      <div className="mt-2 p-3 bg-green-900/30 border border-green-600 rounded-lg">
-                        <div className="text-green-400 text-sm font-medium">
+                      <div className="mt-2 p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+                        <div className="text-emerald-700 text-sm font-semibold">
                           ✓ Selected: {selectedFund1.name}
                         </div>
-                        <div className="text-gray-400 text-xs mt-1">
+                        <div className="text-black/45 text-xs mt-1">
                           Code: {selectedFund1.code}
                         </div>
                       </div>
                     )}
-                    <p className="text-xs text-gray-400 mt-2 italic">
+                    <p className="text-xs text-black/40 mt-2 italic">
                       Type any letter to search
                     </p>
                   </div>
 
                   {/* Fund 2 Search */}
                   <div className="relative">
-                    <label className="block text-base mb-2 text-gray-300 font-medium">
+                    <label className="block text-base mb-2 text-black/60 font-semibold">
                       Second Fund
                     </label>
                     <input
@@ -1007,20 +975,20 @@ export default function MFDetailsPage() {
                         fund2Query.length >= 1 && setShowFund2Dropdown(true)
                       }
                       placeholder="Type to search (e.g., SBI, HDFC, ICICI)..."
-                      className="w-full bg-[#232b44] text-white p-4 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-gray-400"
+                      className="w-full bg-black/5 border border-black/5 text-black p-4 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-purple-500/20 placeholder-black/40"
                     />
                     {showFund2Dropdown && fund2Suggestions.length > 0 && (
-                      <div className="absolute z-10 w-full mt-2 bg-[#232b44] border border-gray-600 rounded-lg shadow-xl max-h-80 overflow-y-auto">
+                      <div className="absolute z-10 w-full mt-2 bg-white border border-black/10 rounded-xl shadow-xl max-h-80 overflow-y-auto">
                         {fund2Suggestions.map((fund) => (
                           <div
                             key={fund.code}
                             onClick={() => handleFund2Select(fund)}
-                            className="p-4 hover:bg-purple-600 cursor-pointer transition-colors border-b border-gray-700 last:border-b-0"
+                            className="p-4 hover:bg-black/5 cursor-pointer transition-colors border-b border-black/5 last:border-b-0"
                           >
-                            <div className="text-white font-medium text-sm mb-1">
+                            <div className="text-black font-semibold text-sm mb-1">
                               {fund.name}
                             </div>
-                            <div className="text-gray-400 text-xs">
+                            <div className="text-black/45 text-xs">
                               Code: {fund.code}
                             </div>
                           </div>
@@ -1028,16 +996,16 @@ export default function MFDetailsPage() {
                       </div>
                     )}
                     {selectedFund2 && (
-                      <div className="mt-2 p-3 bg-green-900/30 border border-green-600 rounded-lg">
-                        <div className="text-green-400 text-sm font-medium">
+                      <div className="mt-2 p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+                        <div className="text-emerald-700 text-sm font-semibold">
                           ✓ Selected: {selectedFund2.name}
                         </div>
-                        <div className="text-gray-400 text-xs mt-1">
+                        <div className="text-black/45 text-xs mt-1">
                           Code: {selectedFund2.code}
                         </div>
                       </div>
                     )}
-                    <p className="text-xs text-gray-400 mt-2 italic">
+                    <p className="text-xs text-black/40 mt-2 italic">
                       Type any letter to search
                     </p>
                   </div>
@@ -1048,108 +1016,108 @@ export default function MFDetailsPage() {
                   <div className="text-center">
                     <button
                       onClick={() => setShowComparison(true)}
-                      className="bg-gradient-to-r from-purple-600 to-cyan-500 hover:from-purple-700 hover:to-cyan-600 text-white px-8 py-4 rounded-lg text-base font-bold transition-all transform hover:scale-105"
+                      className="bg-black hover:bg-gray-800 text-white px-8 py-4 rounded-full text-base font-bold transition-all transform hover:scale-[1.02] shadow-xs cursor-pointer"
                     >
                       Compare Funds
                     </button>
-                    <p className="text-gray-400 text-sm mt-3">
+                    <p className="text-black/40 text-sm mt-3">
                       Click to generate comparison report
                     </p>
                   </div>
                 )}
 
                 {showComparison && fund1Data && fund2Data && (
-                  <div className="mt-8 bg-[#181f31] rounded-xl p-8 shadow-lg">
-                    <h3 className="text-2xl font-bold mb-6 text-white">
+                  <div className="mt-8 bg-[#F5F5F5] border border-black/5 rounded-[1.5rem] p-8 shadow-xs">
+                    <h3 className="text-2xl font-bold mb-6 text-black tracking-tight">
                       Fund Comparison
                     </h3>
                     <div className="grid md:grid-cols-2 gap-6">
-                      <div className="bg-[#232b44] rounded-lg p-6">
-                        <h4 className="text-xl font-bold text-white mb-4">
+                      <div className="bg-white border border-black/5 rounded-2xl p-6 shadow-xs">
+                        <h4 className="text-xl font-bold text-black mb-4">
                           {fund1Data.meta?.scheme_name || selectedFund1.name}
                         </h4>
                         <div className="space-y-3">
                           <div className="flex justify-between items-center text-base">
-                            <span className="font-medium text-gray-300">
+                            <span className="font-semibold text-black/45">
                               Fund House:
                             </span>
-                            <span className="text-white font-semibold">
+                            <span className="text-black font-semibold">
                               {fund1Data.meta?.fund_house || "Not Available"}
                             </span>
                           </div>
                           <div className="flex justify-between items-center text-base">
-                            <span className="font-medium text-gray-300">
+                            <span className="font-semibold text-black/45">
                               Scheme Type:
                             </span>
-                            <span className="text-white font-semibold">
+                            <span className="text-black font-semibold">
                               {fund1Data.meta?.scheme_type || "Not Available"}
                             </span>
                           </div>
                           <div className="flex justify-between items-center text-base">
-                            <span className="font-medium text-gray-300">
+                            <span className="font-semibold text-black/45">
                               Scheme Category:
                             </span>
-                            <span className="text-white font-semibold">
+                            <span className="text-black font-semibold">
                               {fund1Data.meta?.scheme_category ||
                                 "Not Available"}
                             </span>
                           </div>
                           <div className="flex justify-between items-center text-base">
-                            <span className="font-medium text-gray-300">
+                            <span className="font-semibold text-black/45">
                               Code:
                             </span>
-                            <span className="text-white font-semibold">
+                            <span className="text-black font-semibold">
                               {selectedFund1.code}
                             </span>
                           </div>
                         </div>
                       </div>
-                      <div className="bg-[#232b44] rounded-lg p-6">
-                        <h4 className="text-xl font-bold text-white mb-4">
+                      <div className="bg-white border border-black/5 rounded-2xl p-6 shadow-xs">
+                        <h4 className="text-xl font-bold text-black mb-4">
                           {fund2Data.meta?.scheme_name || selectedFund2.name}
                         </h4>
                         <div className="space-y-3">
                           <div className="flex justify-between items-center text-base">
-                            <span className="font-medium text-gray-300">
+                            <span className="font-semibold text-black/45">
                               Fund House:
                             </span>
-                            <span className="text-white font-semibold">
+                            <span className="text-black font-semibold">
                               {fund2Data.meta?.fund_house || "Not Available"}
                             </span>
                           </div>
                           <div className="flex justify-between items-center text-base">
-                            <span className="font-medium text-gray-300">
+                            <span className="font-semibold text-black/45">
                               Scheme Type:
                             </span>
-                            <span className="text-white font-semibold">
+                            <span className="text-black font-semibold">
                               {fund2Data.meta?.scheme_type || "Not Available"}
                             </span>
                           </div>
                           <div className="flex justify-between items-center text-base">
-                            <span className="font-medium text-gray-300">
+                            <span className="font-semibold text-black/45">
                               Scheme Category:
                             </span>
-                            <span className="text-white font-semibold">
+                            <span className="text-black font-semibold">
                               {fund2Data.meta?.scheme_category ||
                                 "Not Available"}
                             </span>
                           </div>
                           <div className="flex justify-between items-center text-base">
-                            <span className="font-medium text-gray-300">
+                            <span className="font-semibold text-black/45">
                               Code:
                             </span>
-                            <span className="text-white font-semibold">
+                            <span className="text-black font-semibold">
                               {selectedFund2.code}
                             </span>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div className="mt-6 p-6 bg-[#232b44] rounded-lg">
-                      <h4 className="text-xl font-bold text-white mb-4">
+                    <div className="mt-6 p-6 bg-white border border-black/5 rounded-2xl shadow-xs">
+                      <h4 className="text-xl font-bold text-black mb-4">
                         AI Comparison Analysis
                       </h4>
-                      <p className="text-gray-300 text-base leading-relaxed">
+                      <p className="text-black/70 text-base leading-relaxed">
                         Based on the comparison between{" "}
                         {fund1Data.meta?.scheme_name || selectedFund1.name} and{" "}
                         {fund2Data.meta?.scheme_name || selectedFund2.name},
@@ -1158,7 +1126,7 @@ export default function MFDetailsPage() {
                         fund2Data.meta?.fund_house
                           ? fund1Data.meta?.fund_house
                           : `${fund1Data.meta?.fund_house} and ${fund2Data.meta?.fund_house} respectively`}
-                        .
+                        .{" "}
                         {fund1Data.meta?.scheme_type ===
                         fund2Data.meta?.scheme_type
                           ? `Both funds are ${fund1Data.meta?.scheme_type} schemes`
@@ -1173,7 +1141,7 @@ export default function MFDetailsPage() {
                 )}
 
                 {!selectedFund1 && !selectedFund2 && (
-                  <p className="text-center text-gray-400 text-base">
+                  <p className="text-center text-black/40 text-base font-medium">
                     Search and select two funds to compare their performance
                     metrics
                   </p>

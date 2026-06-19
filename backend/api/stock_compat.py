@@ -70,7 +70,7 @@ async def _get_price_series(symbol: str, db: AsyncSession, redis) -> list[dict]:
 def _compute_analytics(series: list[dict]) -> pd.DataFrame:
     df = pd.DataFrame(series)
     df["date"] = pd.to_datetime(df["date"])
-    df["returns"] = df["close"].pct_change()
+    df["returns"] = df["close"].pct_change().replace([np.inf, -np.inf], np.nan)
     df["ma20"] = df["close"].rolling(window=20).mean()
     df["ma50"] = df["close"].rolling(window=50).mean()
     return df

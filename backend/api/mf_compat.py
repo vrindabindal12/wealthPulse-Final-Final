@@ -104,7 +104,7 @@ def _nav_df(series: list[dict]) -> pd.DataFrame:
     df["nav"] = pd.to_numeric(df["nav"], errors="coerce")
     df.dropna(subset=["nav"], inplace=True)
     df.sort_values("date", inplace=True)
-    df["returns"] = df["nav"].pct_change()
+    df["returns"] = df["nav"].pct_change().replace([np.inf, -np.inf], np.nan)
     return df
 
 
@@ -254,6 +254,7 @@ async def get_heatmap(
         first_nav=("nav", "first"), last_nav=("nav", "last")
     ).reset_index()
     monthly["value"] = ((monthly["last_nav"] - monthly["first_nav"]) / monthly["first_nav"]) * 100
+    monthly = monthly.replace([np.inf, -np.inf], np.nan).fillna(0.0)
     result = monthly[["year", "month", "value", "last_nav"]].rename(
         columns={"last_nav": "nav"}
     ).to_dict(orient="records")
