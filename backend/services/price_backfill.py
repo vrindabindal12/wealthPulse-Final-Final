@@ -28,16 +28,25 @@ async def _count_rows(symbol: str, asset_type: str, db: AsyncSession) -> int:
     return result.scalar()
 
 
-async def ensure_stock_history(symbol: str, db: AsyncSession):
+async def ensure_stock_history(symbol: str, db: AsyncSession = None):
+    if db is None:
+        from core.database import AsyncSessionLocal
+        async with AsyncSessionLocal() as session:
+            await _ensure_stock_history_impl(symbol, session)
+    else:
+        await _ensure_stock_history_impl(symbol, db)
+
+
+async def _ensure_stock_history_impl(symbol: str, db: AsyncSession):
     count = await _count_rows(symbol, "stock", db)
     if count >= 30:
         return
-    print(f"🔄 Lazy backfill: stock {symbol}")
+    print(f"[INFO] Lazy backfill: stock {symbol}")
     try:
         df = yf.download(symbol, period="1y", interval="1d",
                          progress=False, auto_adjust=True)
         if df.empty:
-            print(f"⚠️  No yfinance data for {symbol}")
+            print(f"[WARNING] No yfinance data for {symbol}")
             return
         rows = []
         for dt, row in df.iterrows():
@@ -52,16 +61,25 @@ async def ensure_stock_history(symbol: str, db: AsyncSession):
         stmt = insert(PriceHistory).values(rows).on_conflict_do_nothing()
         await db.execute(stmt)
         await db.commit()
-        print(f"✅ Lazy backfill: {symbol} — {len(rows)} rows")
+        print(f"[SUCCESS] Lazy backfill: {symbol} — {len(rows)} rows")
     except Exception as e:
-        print(f"⚠️  Lazy backfill error for stock {symbol}: {e}")
+        print(f"[WARNING] Lazy backfill error for stock {symbol}: {e}")
 
 
-async def ensure_mf_history(scheme_code: str, db: AsyncSession):
+async def ensure_mf_history(scheme_code: str, db: AsyncSession = None):
+    if db is None:
+        from core.database import AsyncSessionLocal
+        async with AsyncSessionLocal() as session:
+            await _ensure_mf_history_impl(scheme_code, session)
+    else:
+        await _ensure_mf_history_impl(scheme_code, db)
+
+
+async def _ensure_mf_history_impl(scheme_code: str, db: AsyncSession):
     count = await _count_rows(scheme_code, "mutualfund", db)
     if count >= 30:
         return
-    print(f"🔄 Lazy backfill: MF {scheme_code}")
+    print(f"[INFO] Lazy backfill: MF {scheme_code}")
     try:
         async with httpx.AsyncClient() as client:
             r = await client.get(
@@ -87,20 +105,29 @@ async def ensure_mf_history(scheme_code: str, db: AsyncSession):
             stmt = insert(PriceHistory).values(rows).on_conflict_do_nothing()
             await db.execute(stmt)
             await db.commit()
-            print(f"✅ Lazy backfill: MF {scheme_code} — {len(rows)} rows")
+            print(f"[SUCCESS] Lazy backfill: MF {scheme_code} — {len(rows)} rows")
     except Exception as e:
-        print(f"⚠️  Lazy backfill error for MF {scheme_code}: {e}")
+        print(f"[WARNING] Lazy backfill error for MF {scheme_code}: {e}")
 
 
-async def ensure_crypto_history(coin_id: str, db: AsyncSession):
+async def ensure_crypto_history(coin_id: str, db: AsyncSession = None):
+    if db is None:
+        from core.database import AsyncSessionLocal
+        async with AsyncSessionLocal() as session:
+            await _ensure_crypto_history_impl(coin_id, session)
+    else:
+        await _ensure_crypto_history_impl(coin_id, db)
+
+
+async def _ensure_crypto_history_impl(coin_id: str, db: AsyncSession):
     symbol = COIN_ID_TO_SYMBOL.get(coin_id)
     if not symbol:
-        print(f"⚠️  Unknown coin_id for lazy backfill: {coin_id}")
+        print(f"[WARNING] Unknown coin_id for lazy backfill: {coin_id}")
         return
     count = await _count_rows(symbol, "crypto", db)
     if count >= 30:
         return
-    print(f"🔄 Lazy backfill: crypto {coin_id}")
+    print(f"[INFO] Lazy backfill: crypto {coin_id}")
     try:
         async with httpx.AsyncClient() as client:
             r = await client.get(
@@ -128,6 +155,6 @@ async def ensure_crypto_history(coin_id: str, db: AsyncSession):
             stmt = insert(PriceHistory).values(rows).on_conflict_do_nothing()
             await db.execute(stmt)
             await db.commit()
-            print(f"✅ Lazy backfill: crypto {coin_id} — {len(rows)} rows")
+            print(f"[SUCCESS] Lazy backfill: crypto {coin_id} — {len(rows)} rows")
     except Exception as e:
-        print(f"⚠️  Lazy backfill error for crypto {coin_id}: {e}")
+        print(f"[WARNING] Lazy backfill error for crypto {coin_id}: {e}")

@@ -62,13 +62,13 @@ async def add_holding(
     # Trigger lazy backfill in background — non-blocking
     asset_type = item.asset_type or item.item_type  # handle legacy field
     if asset_type == "stock":
-        background_tasks.add_task(ensure_stock_history, item.symbol, db)
+        background_tasks.add_task(ensure_stock_history, item.symbol)
     elif asset_type == "mutualfund":
-        background_tasks.add_task(ensure_mf_history, item.symbol, db)
+        background_tasks.add_task(ensure_mf_history, item.symbol)
         # Refresh NAVs so Redis gets nav:{schemecode} for this and other MF holdings
         background_tasks.add_task(parse_and_store_navs)
     elif asset_type == "crypto":
-        background_tasks.add_task(ensure_crypto_history, item.symbol, db)
+        background_tasks.add_task(ensure_crypto_history, item.symbol)
 
     return holding
 

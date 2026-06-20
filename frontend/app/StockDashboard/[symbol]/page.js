@@ -147,6 +147,7 @@ export default function StockDetailsPage() {
 
   useEffect(() => {
     setLoading(true);
+    setBuyDate(new Date().toISOString().split("T")[0]);
 
     (async () => {
       try {
@@ -332,7 +333,18 @@ export default function StockDetailsPage() {
         if (response.status === 400) {
           alert(data.detail || "Stock already in portfolio");
         } else {
-          throw new Error(data.detail || "Failed to add to portfolio");
+          let errorMsg = "Failed to add to portfolio";
+          if (typeof data.detail === "string") {
+            errorMsg = data.detail;
+          } else if (Array.isArray(data.detail)) {
+            errorMsg = data.detail.map(err => {
+              const field = err.loc ? err.loc[err.loc.length - 1] : "";
+              return `${field ? field + ": " : ""}${err.msg}`;
+            }).join("\n");
+          } else if (data.detail) {
+            errorMsg = JSON.stringify(data.detail);
+          }
+          throw new Error(errorMsg);
         }
         return;
       }
@@ -479,9 +491,7 @@ export default function StockDetailsPage() {
                         </label>
                         <input
                           type="date"
-                          value={
-                            buyDate || new Date().toISOString().split("T")[0]
-                          }
+                          value={buyDate}
                           onChange={(e) => setBuyDate(e.target.value)}
                           className="w-full bg-black/5 border border-black/5 text-black rounded-xl p-3 text-base focus:outline-none focus:ring-2 focus:ring-purple-500/20"
                         />
