@@ -18,15 +18,15 @@ const nextConfig = {
       // They are NOT rewritten here so they can add auth headers before calling the backend
       {
         source: "/api/mutual/:path*",
-        destination: `${process.env.NEXT_PUBLIC_API_URL}/api/mutual/:path*`,
+        destination: `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/mutual/:path*`,
       },
       {
         source: "/api/stock/:path*",
-        destination: `${process.env.NEXT_PUBLIC_API_URL}/api/stock/:path*`,
+        destination: `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/stock/:path*`,
       },
       {
         source: "/api/crypto/:path*",
-        destination: `${process.env.NEXT_PUBLIC_API_URL}/api/crypto/:path*`,
+        destination: `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/crypto/:path*`,
       },
     ];
   },
