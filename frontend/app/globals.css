@@ -110,3 +110,24 @@ html {
   animation: backers-marquee 30s linear infinite;
   will-change: transform;
 }
+
+/* Testimonials marquee */
+@keyframes testimonials-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.testimonials-track {
+  display: flex;
+  width: max-content;
+  animation: testimonials-marquee 45s linear infinite;
+  will-change: transform;
+}
+
+.testimonials-track:hover {
+  animation-play-state: paused;
+}

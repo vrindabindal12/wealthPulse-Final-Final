@@ -55,25 +55,40 @@ export const InfoSection = () => {
             onMouseLeave={() => setHoveredCard(null)}
             className="rounded-2xl p-7 min-h-80 flex flex-col justify-between relative overflow-hidden"
             style={{
-              backgroundImage: `url('https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260423_164207_f243351d-ed59-48ec-83a0-a5e996bdbe3c.png&w=1280&q=85')`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
+              backgroundColor: hoveredCard === 2 || hoveredCard === 3 ? '#2B2644' : '#F5F5F5',
               flexGrow: hoveredCard === 2 || hoveredCard === 3 ? 1 : 2,
               flexShrink: 1,
               flexBasis: '0%',
-              willChange: 'flex-grow',
-              transition: 'flex-grow 1.2s cubic-bezier(0.4, 0, 0.2, 1)'
+              willChange: 'flex-grow, background-color',
+              transition: 'flex-grow 1.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.7s ease-in-out'
             }}
           >
-            <h3
-              className="text-black text-2xl font-medium leading-snug tracking-tight"
-              style={{ letterSpacing: '-0.02em' }}
-            >
-              Unified tracking
-            </h3>
-            <p className="text-black/70 text-base max-w-xs">
-              Consolidate your Indian stocks, mutual funds, and crypto holdings in one single screen.
-            </p>
+            {/* Background Image overlay */}
+            <div
+              className="absolute inset-0 bg-cover bg-center transition-opacity duration-700 ease-in-out pointer-events-none"
+              style={{
+                backgroundImage: `url('https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260423_164207_f243351d-ed59-48ec-83a0-a5e996bdbe3c.png&w=1280&q=85')`,
+                opacity: hoveredCard === 2 || hoveredCard === 3 ? 0 : 1,
+              }}
+            />
+            
+            <div className="relative z-10 flex flex-col justify-between h-full">
+              <h3
+                className={`text-2xl font-medium leading-snug tracking-tight transition-colors duration-700 ease-in-out ${
+                  hoveredCard === 2 || hoveredCard === 3 ? 'text-white' : 'text-black'
+                }`}
+                style={{ letterSpacing: '-0.02em' }}
+              >
+                Unified tracking
+              </h3>
+              <p
+                className={`text-base transition-colors duration-700 ease-in-out max-w-xs ${
+                  hoveredCard === 2 || hoveredCard === 3 ? 'text-white/60' : 'text-black/70'
+                }`}
+              >
+                Consolidate your Indian stocks, mutual funds, and crypto holdings in one single screen.
+              </p>
+            </div>
           </div>
 
           {/* Card 2: Deep Risk Analytics */}

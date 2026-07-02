@@ -4,6 +4,7 @@ import { HeroSection } from "./Hero";
 import { BackedBySection } from "./BackedBySection";
 import { InfoSection } from "./InfoSection";
 import { UseCasesSection } from "./UseCasesSection";
+import { TestimonialsSection } from "./TestimonialsSection";
 import Footer from "./Footer";
 
 
@@ -14,6 +15,7 @@ export default function LandingPage() {
       <InfoSection />
       <BackedBySection />
       <UseCasesSection />
+      <TestimonialsSection />
       <Footer />
     </div>
   );

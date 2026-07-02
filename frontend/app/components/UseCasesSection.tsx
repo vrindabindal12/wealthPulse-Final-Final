@@ -1,4 +1,4 @@
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, TrendingUp, Layers, ShieldCheck } from 'lucide-react';
 import useUser, { loginHref } from "@/lib/authClient";
 
 export const UseCasesSection = () => {
@@ -22,6 +22,51 @@ export const UseCasesSection = () => {
           <p className="text-black/60 text-base leading-relaxed max-w-sm">
             WealthPulse brings institutional-grade portfolio tracking, advanced risk modeling, and conversational AI guidance straight to retail investors.
           </p>
+
+          {/* Feature List */}
+          <div className="mt-12 space-y-8">
+            <div className="flex gap-4 items-start group">
+              <div className="w-12 h-12 rounded-2xl bg-white border border-black/5 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
+                <TrendingUp className="w-5 h-5 text-black" />
+              </div>
+              <div>
+                <h4 className="text-xl font-medium text-black tracking-tight mb-1">
+                  Monte Carlo Forecasts
+                </h4>
+                <p className="text-black/60 text-sm leading-relaxed max-w-sm">
+                  Run 1-year simulations to project expected price ranges, upper/lower bounds, and return probabilities.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-4 items-start group">
+              <div className="w-12 h-12 rounded-2xl bg-white border border-black/5 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
+                <Layers className="w-5 h-5 text-black" />
+              </div>
+              <div>
+                <h4 className="text-xl font-medium text-black tracking-tight mb-1">
+                  Lot-Level Breakdown
+                </h4>
+                <p className="text-black/60 text-sm leading-relaxed max-w-sm">
+                  Track individual transaction lots, buy prices, dates, and average cost metrics instead of aggregated guesswork.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-4 items-start group">
+              <div className="w-12 h-12 rounded-2xl bg-white border border-black/5 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
+                <ShieldCheck className="w-5 h-5 text-black" />
+              </div>
+              <div>
+                <h4 className="text-xl font-medium text-black tracking-tight mb-1">
+                  Institutional Risk Analytics
+                </h4>
+                <p className="text-black/60 text-sm leading-relaxed max-w-sm">
+                  Instantly compute Sharpe ratios (using a 5% risk-free rate), annualized volatility, and maximum drawdown metrics.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Right Column Video Card */}
