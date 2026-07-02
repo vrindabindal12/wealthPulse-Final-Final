@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import Chatbot from "../components/Chatbot";
 
 // Debounce utility
@@ -113,7 +114,7 @@ export default function CryptoDashboardPage() {
                   <div className="flex items-center gap-4 mb-6 relative z-10">
                     {coin.image ? (
                       <div className="w-12 h-12 rounded-full bg-black/5 p-2 border border-black/5 flex items-center justify-center flex-shrink-0">
-                        <img src={coin.image} alt={coin.name} className="w-full h-full object-contain" />
+                        <Image src={coin.image} alt={coin.name} width={48} height={48} className="w-full h-full object-contain" />
                       </div>
                     ) : (
                       <div className="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center text-xl font-bold shadow-inner flex-shrink-0">

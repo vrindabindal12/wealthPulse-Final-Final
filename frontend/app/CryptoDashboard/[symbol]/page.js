@@ -478,9 +478,11 @@ export default function CryptoDetailsPage() {
                 <div className="bg-white border border-black/5 rounded-[1.5rem] p-6 shadow-xs max-w-xl mx-auto">
                   <div className="flex items-center justify-center gap-4 mb-4">
                     {meta?.image && (
-                      <img
+                      <Image
                         src={meta.image}
                         alt={meta.name}
+                        width={48}
+                        height={48}
                         className="w-12 h-12 rounded-full"
                       />
                     )}

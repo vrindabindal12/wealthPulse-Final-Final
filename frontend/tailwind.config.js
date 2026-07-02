@@ -2,7 +2,7 @@
 
 import plugin from "tailwindcss/plugin";
 
-export default {
+const config = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -135,3 +135,5 @@ export default {
     }),
   ],
 };
+
+export default config;
