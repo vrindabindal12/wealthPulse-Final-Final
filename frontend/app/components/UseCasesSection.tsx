@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { ArrowRight, TrendingUp, Layers, ShieldCheck } from 'lucide-react';
 import useUser, { loginHref } from "@/lib/authClient";
 
 export const UseCasesSection = () => {
   const { isSignedIn } = useUser();
+  const [videoLoaded, setVideoLoaded] = useState(false);
   const targetHref = isSignedIn ? "/Portfolio" : `${loginHref}?screen_hint=signup`;
 
   return (
@@ -70,14 +72,18 @@ export const UseCasesSection = () => {
         </div>
 
         {/* Right Column Video Card */}
-        <div className="large relative rounded-3xl overflow-hidden min-h-[720px] w-full flex flex-col justify-end">
+        <div className="large relative rounded-3xl overflow-hidden min-h-[720px] w-full flex flex-col justify-end bg-gradient-to-br from-[#ECECEC] via-[#F3F3F3] to-[#E5E5E5]">
           {/* Background Video */}
           <video
             autoPlay
             muted
             loop
             playsInline
-            className="object-cover absolute inset-0 w-full h-full"
+            preload="auto"
+            onLoadedData={() => setVideoLoaded(true)}
+            className={`object-cover absolute inset-0 w-full h-full transition-opacity duration-1000 ${
+              videoLoaded ? "opacity-100" : "opacity-0"
+            }`}
             src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260423_183428_ab5e672a-f608-4dcb-b319-f3e040f02e2d.mp4"
           />
 

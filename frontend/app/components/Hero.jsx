@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import useUser, { loginHref } from "@/lib/authClient";
@@ -16,12 +17,13 @@ const heroBrands = [
 
 export const HeroSection = () => {
   const { isSignedIn } = useUser();
+  const [videoLoaded, setVideoLoaded] = useState(false);
   const targetHref = isSignedIn ? "/Portfolio" : `${loginHref}?screen_hint=signup`;
 
   return (
     <section className="flex-1 px-6 pt-16 md:pt-20 pb-4 md:pb-6 flex items-end">
       <div
-        className="relative w-full rounded-2xl overflow-hidden"
+        className="relative w-full rounded-2xl overflow-hidden bg-gradient-to-br from-[#ECECEC] via-[#F3F3F3] to-[#E5E5E5]"
         style={{ height: 'calc(100vh - 140px)', minHeight: '480px' }}
       >
         {/* Background Video */}
@@ -30,7 +32,11 @@ export const HeroSection = () => {
           muted
           loop
           playsInline
-          className="object-cover absolute inset-0 w-full h-full"
+          preload="auto"
+          onLoadedData={() => setVideoLoaded(true)}
+          className={`object-cover absolute inset-0 w-full h-full transition-opacity duration-1000 ${
+            videoLoaded ? "opacity-100" : "opacity-0"
+          }`}
           src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260423_161253_c72b1869-400f-45ed-ac0c-52f68c2ed5bd.mp4"
         />
 
